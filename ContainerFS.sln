@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContainerFS", "ContainerFS\ContainerFS.csproj", "{403E442D-4C5B-46E3-83C3-1362D8D2B7DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{B7440229-0B65-4ED0-8CC4-0AC47ABBA042}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLI", "CLI\CLI.csproj", "{30D1AA71-8774-480A-9F19-D83814423B9D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{403E442D-4C5B-46E3-83C3-1362D8D2B7DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{403E442D-4C5B-46E3-83C3-1362D8D2B7DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{403E442D-4C5B-46E3-83C3-1362D8D2B7DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{403E442D-4C5B-46E3-83C3-1362D8D2B7DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7440229-0B65-4ED0-8CC4-0AC47ABBA042}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7440229-0B65-4ED0-8CC4-0AC47ABBA042}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7440229-0B65-4ED0-8CC4-0AC47ABBA042}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7440229-0B65-4ED0-8CC4-0AC47ABBA042}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30D1AA71-8774-480A-9F19-D83814423B9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30D1AA71-8774-480A-9F19-D83814423B9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30D1AA71-8774-480A-9F19-D83814423B9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30D1AA71-8774-480A-9F19-D83814423B9D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

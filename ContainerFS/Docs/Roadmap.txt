@@ -1,0 +1,12 @@
+﻿Feature roadmap is broken into two sections: 1) things that won't break the existing file format, and 2) things that will.
+
+Using existing format:
+- recursive directory deletion
+
+With revised format:
+- Multi-user and locking - will require a separate lock node (or multiple) and assuredly other state data
+- Naked data blocks - move the list/organization into metadata nodes so there is no overhead within a data 
+  block and better efficiency/utilization in the metadata block
+- Lock on write - for internal objects such as the bitarray for specifying which blocks are in use or free, 
+  to prevent contention scenarios in multi-user write edge cases (i.e. two writers where the container is
+  nearly full and both try to fill it)
