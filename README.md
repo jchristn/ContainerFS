@@ -2,7 +2,7 @@
 
 [![][nuget-img]][nuget]
 
-[nuget]:     https://www.nuget.org/packages/ContainerFS.dll
+[nuget]:     https://www.nuget.org/packages/ContainerFS/
 [nuget-img]: https://badge.fury.io/nu/Object.svg
 
 Self-contained container file system
