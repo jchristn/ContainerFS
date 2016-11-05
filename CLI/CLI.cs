@@ -11,7 +11,7 @@ using ContainerFS;
 
 namespace CLI
 {
-    class Program
+    class CLI
     {
         static string Command;
         static string ContainerFile;
@@ -24,7 +24,7 @@ namespace CLI
         static Container CurrContainer;
         static string ParsedFilename;
         static string ParsedDirectory;
-        static List<string> FilesInDirectory;
+        static List<Tuple<string, long>> FilesInDirectory;
         static List<string> Subdirectories;
         static long Position;
 
@@ -265,9 +265,10 @@ namespace CLI
                                 Console.WriteLine("  Files in Directory : " + FilesInDirectory.Count);
                                 if (FilesInDirectory.Count > 0)
                                 {
-                                    foreach (string curr in FilesInDirectory)
+                                    foreach (Tuple<string, long> curr in FilesInDirectory)
                                     {
-                                        Console.WriteLine("    " + curr);
+                                        string line = "    " + String.Format("{0,-11}", curr.Item2.ToString()) + " " + curr.Item1;
+                                        Console.WriteLine(line);
                                     }
                                 }
                             }

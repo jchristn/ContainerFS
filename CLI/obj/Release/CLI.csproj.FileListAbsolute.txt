@@ -1,0 +1,11 @@
+D:\code\misc\containerfs\CLI\bin\Release\sample.txt
+D:\code\misc\containerfs\CLI\bin\Release\cfs.exe.config
+D:\code\misc\containerfs\CLI\bin\Release\cfs.exe
+D:\code\misc\containerfs\CLI\bin\Release\cfs.pdb
+D:\code\misc\containerfs\CLI\bin\Release\ContainerFS.dll
+D:\code\misc\containerfs\CLI\bin\Release\SyslogLogging.dll
+D:\code\misc\containerfs\CLI\bin\Release\ContainerFS.pdb
+D:\code\misc\containerfs\CLI\bin\Release\SyslogLogging.pdb
+D:\code\misc\containerfs\CLI\obj\Release\CLI.csprojResolveAssemblyReference.cache
+D:\code\misc\containerfs\CLI\obj\Release\cfs.exe
+D:\code\misc\containerfs\CLI\obj\Release\cfs.pdb

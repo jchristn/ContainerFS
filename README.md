@@ -12,8 +12,9 @@ For a sample app exercising ContainerFS and a CLI tool, please see the embedded 
 ## help or feedback
 first things first - do you need help or have feedback?  Contact me at joel at maraudersoftware.com dot com or file an issue here!
 
-## new in v1.0.0
-- first release!
+## new in v1.1.0
+- include file size in enumeration
+- range read support
 
 ## description
 ContainerFS is a self-contained single-user filesystem written in C# with support for files and directories.  ContainerFS is available under the MIT license.  ContainerFS is tested and compatible with Mono.
@@ -112,3 +113,5 @@ mono --server myapp.exe
 
 ## version history
 notes from previous versions (starting with v1.0.0) will be moved here.
+v1.0.0
+- first release

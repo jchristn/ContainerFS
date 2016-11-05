@@ -9,7 +9,7 @@ using ContainerFS;
 
 namespace Test
 {
-    class Program
+    class Test
     {
         public static Random random = new Random((int)DateTime.Now.Ticks);
 
@@ -25,9 +25,11 @@ namespace Test
                 string filename = "";
                 string stringData = "";
                 byte[] byteData;
+                long startPosition;
+                long byteCount;
                 long position;
 
-                List<string> files = new List<string>();
+                List<Tuple<string, long>> files = new List<Tuple<string, long>>();
                 List<string> directories = new List<string>();
 
                 int count = 0;
@@ -90,6 +92,7 @@ namespace Test
                             Console.WriteLine(" stats           Show container stats");
                             Console.WriteLine(" dir             Enumerate a directory");
                             Console.WriteLine(" read            Read a file");
+                            Console.WriteLine(" read_range      Read a range of bytes from a file");
                             Console.WriteLine(" write           Write a file");
                             Console.WriteLine(" delete          Delete a file");
                             Console.WriteLine(" enum_block      Enumerate block contents");
@@ -123,10 +126,31 @@ namespace Test
                             {
                                 c.ReadDirectory(path, out files, out directories, out position);
                                 Console.WriteLine("Position    : " + position);
-                                Console.WriteLine("Files       : " + files.Count);
-                                foreach (string curr in files) Console.WriteLine("  " + curr);
                                 Console.WriteLine("Directories : " + directories.Count);
-                                foreach (string curr in directories) Console.WriteLine("  " + curr);
+                                if (directories != null && directories.Count > 0)
+                                {
+                                    foreach (string curr in directories)
+                                    {
+                                        Console.WriteLine("    " + curr);
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("    (none)");
+                                }
+                                Console.WriteLine("Files       : " + files.Count);
+                                if (files != null && files.Count > 0)
+                                {
+                                    foreach (Tuple<string, long> curr in files)
+                                    {
+                                        string line = "    " + String.Format("{0,-11}", curr.Item2.ToString()) + " " + curr.Item1;
+                                        Console.WriteLine(line);
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("    (none)");
+                                }
                             }
                             catch (DirectoryNotFoundException) { Console.WriteLine("Not found"); }
                             catch (IOException) { Console.WriteLine("Failed to iterate"); }
@@ -140,6 +164,37 @@ namespace Test
                             try
                             {
                                 byteData = c.ReadFile(path, filename);
+                                if (byteData == null || byteData.Length < 1) Console.WriteLine("(null)");
+                                byte[] displayData = null;
+                                if (byteData.Length > 256)
+                                {
+                                    displayData = new byte[256];
+                                    Buffer.BlockCopy(byteData, 0, displayData, 0, 256);
+                                    Console.WriteLine(Encoding.UTF8.GetString(displayData) + " ... truncated");
+                                }
+                                else
+                                {
+                                    Console.WriteLine(Encoding.UTF8.GetString(byteData));
+                                }
+                            }
+                            catch (DirectoryNotFoundException) { Console.WriteLine("Directory not found"); }
+                            catch (FileNotFoundException) { Console.WriteLine("File not found"); }
+                            catch (IOException e) { Console.WriteLine("Exception: " + e.Message); }
+                            break;
+
+                        case "read_range":
+                            Console.Write("Path: ");
+                            path = Console.ReadLine();
+                            Console.Write("File: ");
+                            filename = Console.ReadLine();
+                            Console.Write("Start: ");
+                            startPosition = Convert.ToInt64(Console.ReadLine());
+                            Console.Write("Count: ");
+                            byteCount = Convert.ToInt64(Console.ReadLine());
+
+                            try
+                            {
+                                byteData = c.ReadFile(path, filename, startPosition, byteCount);
                                 if (byteData == null || byteData.Length < 1) Console.WriteLine("(null)");
                                 byte[] displayData = null;
                                 if (byteData.Length > 256)

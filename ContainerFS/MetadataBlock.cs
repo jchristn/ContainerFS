@@ -273,7 +273,7 @@ namespace ContainerFS
         }
 
         /// <summary>
-        /// Retrieve all byte data containing in this block and associated child data blocks.
+        /// Retrieve all byte data contained in this block and associated child data blocks.
         /// </summary>
         /// <returns>Byte array.</returns>
         public byte[] GetAllData()
@@ -311,7 +311,50 @@ namespace ContainerFS
                 return localData;
             }
         }
-        
+
+        /// <summary>
+        /// Retrieve data from the specified range.
+        /// </summary>
+        /// <param name="startPosition">The starting position from which to read.</param>
+        /// <param name="count">The number of bytes to read.</param>
+        /// <returns>Byte data for the requested range.</returns>
+        public byte[] GetData(long startPosition, long count)
+        {
+            if (CfsCommon.IsTrue(IsDirectory)) throw new InvalidOperationException("Get data must only be called on file metadata blocks");
+
+            if (Data == null || Data.Length < 1) return null;
+            
+            byte[] localData = new byte[LocalDataLength];
+            Buffer.BlockCopy(Data, 0, localData, 0, LocalDataLength);
+
+            if (ChildDataBlock > 0)
+            {
+                // get child data
+                byte[] nextBytes = CfsCommon.ReadFromPosition(Filestream, ChildDataBlock, 64);
+                DataBlock nextBlock = DataBlock.FromBytes(Filestream, BlockSizeBytes, nextBytes, Logging);
+                nextBlock.Filestream = Filestream;
+                byte[] childData = nextBlock.GetAllData();
+
+                // join
+                if (childData != null)
+                {
+                    byte[] ret = new byte[(localData.Length + childData.Length)];
+                    Buffer.BlockCopy(localData, 0, ret, 0, localData.Length);
+                    Buffer.BlockCopy(childData, 0, ret, localData.Length, childData.Length);
+                    return ret;
+                }
+                else
+                {
+                    return localData;
+                }
+            }
+            else
+            {
+                return localData;
+            }
+
+        }
+
         /// <summary>
         /// Retrieve the number of data blocks associated with the metadata object.
         /// </summary>

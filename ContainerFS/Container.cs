@@ -319,7 +319,79 @@ namespace ContainerFS
             }
             return fileData;
         }
-        
+
+        /// <summary>
+        /// Read a byte range within a file.
+        /// </summary>
+        /// <param name="path">The directory path, i.e. / or /directory.</param>
+        /// <param name="name">The name of the file.</param>
+        /// <param name="startPosition">The starting position from which to read.</param>
+        /// <param name="count">The number of bytes to read.</param>
+        /// <returns>Byte data for the requested range.</returns>
+        public byte[] ReadFile(string path, string name, long startPosition, long count)
+        {
+            if (String.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
+            if (String.IsNullOrEmpty(path)) path = "/";
+
+            // check if path exists
+            long currPosition = 0;
+            MetadataBlock dirMetadata = FindDirectoryMetadata(path, out currPosition);
+            if (dirMetadata == null)
+            {
+                LogDebug("ReadFile unable to find " + path);
+                throw new DirectoryNotFoundException(path);
+            }
+            else
+            {
+                LogDebug("ReadFile found parent directory at position " + currPosition);
+            }
+
+            // check if file exists in path
+            long filePosition = 0;
+            if (!FindFileMetadata(path, name, out filePosition))
+            {
+                LogDebug("ReadFile file " + name + " does not exist");
+                throw new FileNotFoundException("File does not exist");
+            }
+
+            // read file metadata
+            MetadataBlock fileMetadata = MetadataBlock.FromPosition(Filestream, BlockSizeBytes, filePosition, Logging);
+            if (fileMetadata == null)
+            {
+                LogDebug("ReadFile unable to retrieve file metadata for " + name);
+                throw new FileNotFoundException("File does not exist");
+            }
+
+            // check if position out of range
+            if ((startPosition < 0) || (startPosition > fileMetadata.FullDataLength))
+            {
+                LogDebug("ReadFile requested start position out of range");
+                throw new IOException("Out of range");
+            }
+
+            // check if sum out of range
+            if ((startPosition + count) > fileMetadata.FullDataLength)
+            {
+                LogDebug("ReadFile requested byte range exceeds file length");
+                throw new IOException("File length exceeded");
+            }
+            
+            // ReadDataFromMetadata
+            byte[] fileData = fileMetadata.GetAllData();
+            if (fileData != null)
+            {
+                LogDebug("ReadFile successfully read file " + name + " (" + fileData.Length + " bytes)");
+            }
+            else
+            {
+                LogDebug("ReadFile successfully read file " + name + " (no data)");
+            }
+
+            byte[] ret = new byte[(int)count];
+            Buffer.BlockCopy(fileData, (int)startPosition, ret, 0, (int)count);
+            return ret;
+        }
+
         /// <summary>
         /// Write a file to the container at a specified path and filename.
         /// </summary>
@@ -513,9 +585,9 @@ namespace ContainerFS
         /// <param name="files">List of filenames contained in the directory (string).</param>
         /// <param name="directories">List of subdirectories contained in the directory (string).</param>
         /// <param name="position">The position of the block within the container (long).</param>
-        public void ReadDirectory(string path, out List<string> files, out List<string> directories, out long position)
+        public void ReadDirectory(string path, out List<Tuple<string, long>> files, out List<string> directories, out long position)
         {
-            files = new List<string>();
+            files = new List<Tuple<string, long>>();
             directories = new List<string>();
             if (String.IsNullOrEmpty(path)) path = "/";
             if (String.Compare(path, ".") == 0) path = "/";
@@ -616,7 +688,7 @@ namespace ContainerFS
                 }
 
                 // check if already exists
-                List<string> files = new List<string>();
+                List<Tuple<string, long>> files = new List<Tuple<string, long>>();
                 List<string> directories = new List<string>();
                 if (!EnumerateDirectory(parentPath, out files, out directories, out currPosition))
                 {
@@ -626,9 +698,9 @@ namespace ContainerFS
 
                 if (files != null && files.Count > 0)
                 {
-                    foreach (string curr in files)
+                    foreach (Tuple<string, long> curr in files)
                     {
-                        if (String.Compare(curr.ToLower(), targetDirectory.ToLower()) == 0)
+                        if (String.Compare(curr.Item1.ToLower(), targetDirectory.ToLower()) == 0)
                         {
                             LogDebug("WriteDirectory " + targetDirectory + " file already exists in " + parentPath);
                             throw new IOException("File already exists");
@@ -688,7 +760,7 @@ namespace ContainerFS
             }
 
             // enumerate directory
-            List<string> files = null;
+            List<Tuple<string, long>> files = null;
             List<string> directories = null;
             if (!EnumerateDirectory(path, out files, out directories, out currPosition))
             {
@@ -747,22 +819,47 @@ namespace ContainerFS
             return true;
         }
 
+        private bool IsDirectoryEmpty(List<Tuple<string, long>> files, List<string> directories)
+        {
+            if (files != null && files.Count > 0)
+            {
+                LogDebug("IsDirectoryEmpty directory contains " + files.Count + " files");
+                return false;
+            }
+            if (directories != null && directories.Count > 0)
+            {
+                LogDebug("IsDirectoryEmpty directory contains " + directories.Count + " directories");
+                return false;
+            }
+            return true;
+        }
+
         private bool FileExists(string path, string name)
         {
             if (String.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
             if (String.IsNullOrEmpty(path)) path = "/";
 
-            List<string> files;
+            List<Tuple<string, long>> files;
             List<string> directories;
             long currPosition = 0;
             if (!EnumerateDirectory(path, out files, out directories, out currPosition)) throw new IOException("Unable to iterate directory");
-            if (files.Contains(name))
+
+            if (files == null || files.Count < 1)
             {
-                LogDebug("FileExists " + name + " exists in " + path);
-                return true;
+                LogDebug("FileExists " + path + " is empty");
+                return false;
             }
             else
             {
+                foreach (Tuple<string, long> curr in files)
+                {
+                    if (String.Compare(curr.Item1.ToLower().Trim(), curr.Item1.ToLower().Trim()) == 0)
+                    {
+                        LogDebug("FileExists " + name + " exists in path " + path);
+                        return true;
+                    }
+                }
+
                 LogDebug("FileExists " + name + " does not exist in " + path);
                 return false;
             }
@@ -1264,12 +1361,12 @@ namespace ContainerFS
 
         private bool EnumerateDirectory(
             string path, 
-            out List<string> files, 
+            out List<Tuple<string, long>> files, 
             out List<string> directories,
             out long currPosition)
         {
             currPosition = 0;
-            files = new List<string>();
+            files = new List<Tuple<string, long>>();
             directories = new List<string>();
             
             if (String.IsNullOrEmpty(path)) path = "/";
@@ -1290,6 +1387,7 @@ namespace ContainerFS
                 LogDebug("EnumerateDirectory " + path + " not found");
                 return false;     
             }
+
             if (metadata.LocalDataLength <= 0 && metadata.ChildDataBlock < 0)
             {
                 LogDebug("EnumerateDirectory " + path + " is empty");
@@ -1344,7 +1442,7 @@ namespace ContainerFS
                 }
 
                 if (CfsCommon.IsTrue(currMetadata.IsDirectory)) directories.Add(currMetadata.Name);
-                if (CfsCommon.IsTrue(currMetadata.IsFile)) files.Add(currMetadata.Name);
+                if (CfsCommon.IsTrue(currMetadata.IsFile)) files.Add(new Tuple<string, long>(currMetadata.Name, currMetadata.FullDataLength));
             }
 
             LogDebug("EnumerateDirectory returning md for " + path + " (" + files.Count + " file, " + directories.Count + " directory)");
