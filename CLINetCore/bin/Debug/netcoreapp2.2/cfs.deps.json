@@ -1,0 +1,54 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v2.2",
+    "signature": "ba539bba404064f6ec24aff0b4761f3908c2bfd1"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v2.2": {
+      "cfs/1.0.0": {
+        "dependencies": {
+          "ContainerFS": "1.1.1"
+        },
+        "runtime": {
+          "cfs.dll": {}
+        }
+      },
+      "SyslogLogging/1.0.10": {
+        "runtime": {
+          "lib/netstandard2.0/LoggingModule.dll": {
+            "assemblyVersion": "1.0.10.0",
+            "fileVersion": "1.0.10.0"
+          }
+        }
+      },
+      "ContainerFS/1.1.1": {
+        "dependencies": {
+          "SyslogLogging": "1.0.10"
+        },
+        "runtime": {
+          "ContainerFS.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "cfs/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SyslogLogging/1.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yi5UmWevLYRhZy1FR5YbyobICaOIxrpJX9vzCWXDR6W7xUycPT3EtNpYiLI7B5rxf2a3J8rOk++CRtIwEUwJtg==",
+      "path": "sysloglogging/1.0.10",
+      "hashPath": "sysloglogging.1.0.10.nupkg.sha512"
+    },
+    "ContainerFS/1.1.1": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

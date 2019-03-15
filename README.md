@@ -9,25 +9,29 @@ Self-contained container file system
 
 For a sample app exercising ContainerFS and a CLI tool, please see the embedded projects.
 
-## help or feedback
-first things first - do you need help or have feedback?  Contact me at joel at maraudersoftware.com dot com or file an issue here!
+## Help or feedback
 
-## new in v1.1.0
-- include file size in enumeration
-- range read support
+First things first - do you need help or have feedback?  Contact me at joel dot christner at gmail dot com or file an issue here!
 
-## description
+## New in v1.1.1
+
+- Retarget to .NET Core 2.0 and .NET Framework 4.5.2
+
+## Description
+
 ContainerFS is a self-contained single-user filesystem written in C# with support for files and directories.  ContainerFS is available under the MIT license.  ContainerFS is tested and compatible with Mono.
 
 Core use cases for ContainerFS:
 - self-contained file system, single large BLOB containing a nested filesystem
 
-## important notes
+## Important notes
+
 ContainerFS is still early in development and there are a large number of performance, scalability, consistency, and efficiency optimizations we wish to make.  While we have high aspirations on performance, please be aware it's not there yet.  Some items on our roadmap:
 - multi-user support
 - journaling for crash consistency
 
-## simple example
+## Simple example
+
 Refer to the Test project for a thorough example.
 ```
 using ContainerFS;
@@ -68,10 +72,12 @@ c.WriteDirectory("/newdirectory/temp");
 c.DeleteDirectory("/newdirectory/temp");
 ```
 
-## exceptions
+## Exceptions
+
 ContainerFS commonly uses DirectoryNotFoundException and IOException.  Exceptions of type IOException will contain a message such as "Directory not found".
 
-## using the CLI
+## Using the CLI
+
 The CLI project produces a simple-to-use command line tool for creating or interacting with a container.
 ```
 Create a container:
@@ -104,14 +110,21 @@ Delete a file:
 cfs container.cfs delete --file=/temp.txt
 ```
 
-## running under Mono
+## Running under Mono
+
 ContainerFS works well in Mono environments to the extent that we have tested it.  It is recommended that when running under Mono, you execute the containing EXE using --server and after using the Mono Ahead-of-Time Compiler (AOT).
 ```
 mono --aot=nrgctx-trampolines=8096,nimt-trampolines=8096,ntrampolines=4048 --server myapp.exe
 mono --server myapp.exe
 ```
 
-## version history
-notes from previous versions (starting with v1.0.0) will be moved here.
-v1.0.0
+## Version history
+
+Notes from previous versions (starting with v1.0.0) will be moved here.
+
+v1.1.x
+- Include file size in enumeration
+- Range read support
+
+v1.0.x
 - first release

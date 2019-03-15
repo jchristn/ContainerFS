@@ -1,0 +1,11 @@
+C:\code\Misc\ContainerFS\TestNetFramework\bin\Debug\Test.exe.config
+C:\code\Misc\ContainerFS\TestNetFramework\bin\Debug\Test.exe
+C:\code\Misc\ContainerFS\TestNetFramework\bin\Debug\Test.pdb
+C:\code\Misc\ContainerFS\TestNetFramework\bin\Debug\ContainerFS.dll
+C:\code\Misc\ContainerFS\TestNetFramework\bin\Debug\LoggingModule.dll
+C:\code\Misc\ContainerFS\TestNetFramework\bin\Debug\ContainerFS.pdb
+C:\code\Misc\ContainerFS\TestNetFramework\obj\Debug\TestNetFramework.csprojAssemblyReference.cache
+C:\code\Misc\ContainerFS\TestNetFramework\obj\Debug\TestNetFramework.csproj.CoreCompileInputs.cache
+C:\code\Misc\ContainerFS\TestNetFramework\obj\Debug\TestNetFramework.csproj.CopyComplete
+C:\code\Misc\ContainerFS\TestNetFramework\obj\Debug\Test.exe
+C:\code\Misc\ContainerFS\TestNetFramework\obj\Debug\Test.pdb

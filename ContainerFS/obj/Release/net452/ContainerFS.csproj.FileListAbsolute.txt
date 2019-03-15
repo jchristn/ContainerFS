@@ -1,0 +1,9 @@
+C:\code\Misc\ContainerFS\ContainerFS\bin\Release\net452\ContainerFS.dll
+C:\code\Misc\ContainerFS\ContainerFS\bin\Release\net452\ContainerFS.pdb
+C:\code\Misc\ContainerFS\ContainerFS\bin\Release\net452\LoggingModule.dll
+C:\code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.csproj.CoreCompileInputs.cache
+C:\code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.AssemblyInfoInputs.cache
+C:\code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.AssemblyInfo.cs
+C:\code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.csproj.CopyComplete
+C:\code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.dll
+C:\code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.pdb

@@ -1,6 +1,0 @@
-D:\code\misc\containerfs\ContainerFS\bin\Release\ContainerFS.dll
-D:\code\misc\containerfs\ContainerFS\bin\Release\ContainerFS.pdb
-D:\code\misc\containerfs\ContainerFS\bin\Release\SyslogLogging.dll
-D:\code\misc\containerfs\ContainerFS\bin\Release\SyslogLogging.pdb
-D:\code\misc\containerfs\ContainerFS\obj\Release\ContainerFS.dll
-D:\code\misc\containerfs\ContainerFS\obj\Release\ContainerFS.pdb

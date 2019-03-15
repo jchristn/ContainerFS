@@ -1,0 +1,12 @@
+C:\code\Misc\ContainerFS\CLINetFramework\bin\Debug\sample.txt
+C:\code\Misc\ContainerFS\CLINetFramework\bin\Debug\cfs.exe.config
+C:\code\Misc\ContainerFS\CLINetFramework\bin\Debug\cfs.exe
+C:\code\Misc\ContainerFS\CLINetFramework\bin\Debug\cfs.pdb
+C:\code\Misc\ContainerFS\CLINetFramework\bin\Debug\ContainerFS.dll
+C:\code\Misc\ContainerFS\CLINetFramework\bin\Debug\LoggingModule.dll
+C:\code\Misc\ContainerFS\CLINetFramework\bin\Debug\ContainerFS.pdb
+C:\code\Misc\ContainerFS\CLINetFramework\obj\Debug\CLINetFramework.csprojAssemblyReference.cache
+C:\code\Misc\ContainerFS\CLINetFramework\obj\Debug\CLINetFramework.csproj.CoreCompileInputs.cache
+C:\code\Misc\ContainerFS\CLINetFramework\obj\Debug\CLINetFramework.csproj.CopyComplete
+C:\code\Misc\ContainerFS\CLINetFramework\obj\Debug\cfs.exe
+C:\code\Misc\ContainerFS\CLINetFramework\obj\Debug\cfs.pdb

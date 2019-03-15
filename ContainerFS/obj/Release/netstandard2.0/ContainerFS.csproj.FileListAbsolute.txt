@@ -1,0 +1,9 @@
+C:\code\Misc\ContainerFS\ContainerFS\bin\Release\netstandard2.0\ContainerFS.deps.json
+C:\code\Misc\ContainerFS\ContainerFS\bin\Release\netstandard2.0\ContainerFS.dll
+C:\code\Misc\ContainerFS\ContainerFS\bin\Release\netstandard2.0\ContainerFS.pdb
+C:\code\Misc\ContainerFS\ContainerFS\obj\Release\netstandard2.0\ContainerFS.csprojAssemblyReference.cache
+C:\code\Misc\ContainerFS\ContainerFS\obj\Release\netstandard2.0\ContainerFS.csproj.CoreCompileInputs.cache
+C:\code\Misc\ContainerFS\ContainerFS\obj\Release\netstandard2.0\ContainerFS.AssemblyInfoInputs.cache
+C:\code\Misc\ContainerFS\ContainerFS\obj\Release\netstandard2.0\ContainerFS.AssemblyInfo.cs
+C:\code\Misc\ContainerFS\ContainerFS\obj\Release\netstandard2.0\ContainerFS.dll
+C:\code\Misc\ContainerFS\ContainerFS\obj\Release\netstandard2.0\ContainerFS.pdb
