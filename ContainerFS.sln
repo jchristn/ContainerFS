@@ -3,15 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNetFramework", "TestNetFramework\TestNetFramework.csproj", "{B7440229-0B65-4ED0-8CC4-0AC47ABBA042}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{B7440229-0B65-4ED0-8CC4-0AC47ABBA042}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLINetFramework", "CLINetFramework\CLINetFramework.csproj", "{30D1AA71-8774-480A-9F19-D83814423B9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cli", "Cli\Cli.csproj", "{30D1AA71-8774-480A-9F19-D83814423B9D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContainerFS", "ContainerFS\ContainerFS.csproj", "{1E8023F2-27FA-4FDF-A124-AB5624087C14}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLINetCore", "CLINetCore\CLINetCore.csproj", "{6C170BB8-BA50-49DB-A5F7-47B865DE6269}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNetCore", "TestNetCore\TestNetCore.csproj", "{0DBFE8C9-0043-4D3B-BED1-8E637BA91E05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
