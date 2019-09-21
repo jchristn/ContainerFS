@@ -7,3 +7,4 @@ C:\code\Misc\ContainerFS\ContainerFS\obj\Release\netstandard2.0\ContainerFS.Asse
 C:\code\Misc\ContainerFS\ContainerFS\obj\Release\netstandard2.0\ContainerFS.AssemblyInfo.cs
 C:\code\Misc\ContainerFS\ContainerFS\obj\Release\netstandard2.0\ContainerFS.dll
 C:\code\Misc\ContainerFS\ContainerFS\obj\Release\netstandard2.0\ContainerFS.pdb
+C:\Code\Misc\ContainerFS\ContainerFS\bin\Release\netstandard2.0\ContainerFS.xml

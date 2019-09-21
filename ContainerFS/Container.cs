@@ -9,6 +9,9 @@ using SyslogLogging;
 
 namespace ContainerFS
 {
+    /// <summary>
+    /// Self-contained file system.
+    /// </summary>
     public class Container
     {
         #region Private-Members
@@ -52,6 +55,7 @@ namespace ContainerFS
         /// Create a new container.
         /// </summary>
         /// <param name="filename">The name of the file to use.</param>
+        /// <param name="name">The name of the container.</param>
         /// <param name="blockSize">The block size, in bytes.</param>
         /// <param name="blockCount">The number of blocks.</param>
         /// <param name="loggingEnable">Whether or not you wish to have log statements sent to the console and localhost syslog.</param>

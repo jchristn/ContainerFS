@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v2.2": {
       "cfs/1.0.0": {
         "dependencies": {
-          "ContainerFS": "1.1.1"
+          "ContainerFS": "1.1.3"
         },
         "runtime": {
           "cfs.dll": {}
@@ -22,7 +22,7 @@
           }
         }
       },
-      "ContainerFS/1.1.1": {
+      "ContainerFS/1.1.3": {
         "dependencies": {
           "SyslogLogging": "1.0.10"
         },
@@ -45,7 +45,7 @@
       "path": "sysloglogging/1.0.10",
       "hashPath": "sysloglogging.1.0.10.nupkg.sha512"
     },
-    "ContainerFS/1.1.1": {
+    "ContainerFS/1.1.3": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

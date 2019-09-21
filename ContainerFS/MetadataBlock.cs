@@ -9,6 +9,9 @@ using SyslogLogging;
 
 namespace ContainerFS
 {
+    /// <summary>
+    /// Block of metadata.
+    /// </summary>
     public class MetadataBlock
     {
         #region Private-Members

@@ -1,0 +1,403 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ContainerFS</name>
+    </assembly>
+    <members>
+        <member name="T:ContainerFS.Container">
+            <summary>
+            Self-contained file system.
+            </summary>
+        </member>
+        <member name="F:ContainerFS.Container.SignatureBytes">
+            <summary>
+            The signature found in the first four bytes of a container header block.
+            </summary>
+        </member>
+        <member name="M:ContainerFS.Container.#ctor">
+            <summary>
+            Parameterless constructor.  Please do not use.
+            </summary>
+        </member>
+        <member name="M:ContainerFS.Container.#ctor(System.String,System.String,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Create a new container.
+            </summary>
+            <param name="filename">The name of the file to use.</param>
+            <param name="name">The name of the container.</param>
+            <param name="blockSize">The block size, in bytes.</param>
+            <param name="blockCount">The number of blocks.</param>
+            <param name="loggingEnable">Whether or not you wish to have log statements sent to the console and localhost syslog.</param>
+        </member>
+        <member name="M:ContainerFS.Container.ToString">
+            <summary>
+            User-readable string containing details about the container.
+            </summary>
+            <returns>User-readable string containing details about the container.</returns>
+        </member>
+        <member name="M:ContainerFS.Container.GetTotalBlocks">
+            <summary>
+            Retrieve the total number of blocks in the container.
+            </summary>
+            <returns>Integer.</returns>
+        </member>
+        <member name="M:ContainerFS.Container.GetUnusedBlocks">
+            <summary>
+            Retrieve the number of unused, unallocated blocks in the container.
+            </summary>
+            <returns>Integer.</returns>
+        </member>
+        <member name="M:ContainerFS.Container.GetTotalSpace">
+            <summary>
+            Retrieve the total capacity of the container.
+            </summary>
+            <returns>Long.</returns>
+        </member>
+        <member name="M:ContainerFS.Container.GetFreeSpace">
+            <summary>
+            Retrieve the total unallocated, unused capacity of the container.
+            </summary>
+            <returns>Long.</returns>
+        </member>
+        <member name="M:ContainerFS.Container.ReadRawBlockByIndex(System.Int32)">
+            <summary>
+            Read a specific block's byte data by its block index.
+            </summary>
+            <param name="id">The index of the block.</param>
+            <returns>Byte data containing the block.</returns>
+        </member>
+        <member name="M:ContainerFS.Container.ReadRawBlock(System.Int64)">
+            <summary>
+            Read a specific block's byte data by its byte position in the container file.
+            </summary>
+            <param name="position">The position of the block.</param>
+            <returns>Byte data containing the block.</returns>
+        </member>
+        <member name="M:ContainerFS.Container.EnumerateBlockByIndex(System.Int32)">
+            <summary>
+            Display statistics about a block found at a specific block index within the container file.
+            </summary>
+            <param name="id">The index of the block.</param>
+            <returns>String.</returns>
+        </member>
+        <member name="M:ContainerFS.Container.EnumerateBlock(System.Int64)">
+            <summary>
+            Display statistics about a block by its byte position in the container file.
+            </summary>
+            <param name="position">The position of the block.</param>
+            <returns>String.</returns>
+        </member>
+        <member name="M:ContainerFS.Container.ReadFile(System.String,System.String)">
+            <summary>
+            Read the contents of a file.
+            </summary>
+            <param name="path">The directory path, i.e. / or /directory.</param>
+            <param name="name">The name of the file.</param>
+            <returns>Byte data for the entire file.</returns>
+        </member>
+        <member name="M:ContainerFS.Container.ReadFile(System.String,System.String,System.Int64,System.Int64)">
+            <summary>
+            Read a byte range within a file.
+            </summary>
+            <param name="path">The directory path, i.e. / or /directory.</param>
+            <param name="name">The name of the file.</param>
+            <param name="startPosition">The starting position from which to read.</param>
+            <param name="count">The number of bytes to read.</param>
+            <returns>Byte data for the requested range.</returns>
+        </member>
+        <member name="M:ContainerFS.Container.WriteFile(System.String,System.String,System.Byte[])">
+            <summary>
+            Write a file to the container at a specified path and filename.
+            </summary>
+            <param name="path">The directory path, i.e. / or /directory.</param>
+            <param name="name">The name of the file.</param>
+            <param name="data">Byte data for the entire file.</param>
+        </member>
+        <member name="M:ContainerFS.Container.DeleteFile(System.String,System.String)">
+            <summary>
+            Delete a file at a specified path and filename.
+            </summary>
+            <param name="path">The directory path, i.e. / or /directory.</param>
+            <param name="name">The name of the file.</param>
+        </member>
+        <member name="M:ContainerFS.Container.ReadDirectory(System.String,System.Collections.Generic.List{System.Tuple{System.String,System.Int64}}@,System.Collections.Generic.List{System.String}@,System.Int64@)">
+            <summary>
+            Read the contents (files, directories) of a specific directory.
+            </summary>
+            <param name="path">The directory path, i.e. / or /directory.</param>
+            <param name="files">List of filenames contained in the directory (string).</param>
+            <param name="directories">List of subdirectories contained in the directory (string).</param>
+            <param name="position">The position of the block within the container (long).</param>
+        </member>
+        <member name="M:ContainerFS.Container.WriteDirectory(System.String)">
+            <summary>
+            Create a directory at a specific path.  The parent directory structure must already exist.
+            </summary>
+            <param name="path">The directory path, i.e. /directory or /directory/subdirectory.</param>
+        </member>
+        <member name="M:ContainerFS.Container.DeleteDirectory(System.String)">
+            <summary>
+            Delete a directory at a specific path.  The directory must be empty (no files, no subdirectories).
+            </summary>
+            <param name="path">The directory path, i.e. /directory or /directory/subdirectory.</param>
+        </member>
+        <member name="M:ContainerFS.Container.FromFile(System.String,System.Boolean)">
+            <summary>
+            Instantiate a container by loading it from an existing file.
+            </summary>
+            <param name="filename">The file to load.</param>
+            <param name="loggingEnable">Enable or disable debug logging.</param>
+            <returns>A ready-to-use container object.</returns>
+        </member>
+        <member name="T:ContainerFS.DataBlock">
+            <summary>
+            Block of data.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.DataBlock.Filestream">
+            <summary>
+            The FileStream used to interact with the container file.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.DataBlock.Signature">
+            <summary>
+            The first four bytes of the block.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.DataBlock.ParentBlock">
+            <summary>
+            The position of the parent block.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.DataBlock.ChildBlock">
+            <summary>
+            The position of the next child block.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.DataBlock.DataLength">
+            <summary>
+            The amount of data written to this block.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.DataBlock.Data">
+            <summary>
+            Byte data stored in this block.
+            </summary>
+        </member>
+        <member name="F:ContainerFS.DataBlock.SignatureBytes">
+            <summary>
+            The signature found in the first four bytes of a data block.
+            </summary>
+        </member>
+        <member name="F:ContainerFS.DataBlock.BytesReservedPerBlock">
+            <summary>
+            The number of bytes reserved at the beginning of a block for metadata.
+            </summary>
+        </member>
+        <member name="M:ContainerFS.DataBlock.#ctor">
+            <summary>
+            Parameterless constructor.  Please do not use.
+            </summary>
+        </member>
+        <member name="M:ContainerFS.DataBlock.#ctor(System.IO.FileStream,System.Int32,System.Byte[],SyslogLogging.LoggingModule)">
+            <summary>
+            Create a new data block.
+            </summary>
+            <param name="fs">The FileStream instance to use.</param>
+            <param name="blockSize">The block size, in bytes.</param>
+            <param name="data">The byte data to include in the block payload.</param>
+            <param name="logging">Instance of LoggingModule to use for logging events.</param>
+        </member>
+        <member name="M:ContainerFS.DataBlock.ToString">
+            <summary>
+            Return a user-readable string containing details about the block.
+            </summary>
+            <returns>String.</returns>
+        </member>
+        <member name="M:ContainerFS.DataBlock.ToBytes">
+            <summary>
+            Create a formatted byte array containing the block.
+            </summary>
+            <returns>Byte array.</returns>
+        </member>
+        <member name="M:ContainerFS.DataBlock.GetAllData">
+            <summary>
+            Retrieve all byte data containing in this block and associated child data blocks.
+            </summary>
+            <returns>Byte array.</returns>
+        </member>
+        <member name="M:ContainerFS.DataBlock.FromBytes(System.IO.FileStream,System.Int32,System.Byte[],SyslogLogging.LoggingModule)">
+            <summary>
+            Create a new data block instance from a byte array from data found within the container file.
+            </summary>
+            <param name="fs">The FileStream instance to use.</param>
+            <param name="blockSize">The block size, in bytes.</param>
+            <param name="ba">The byte array containing the full block.</param>
+            <param name="logging">Instance of LoggingModule to use for logging events.</param>
+            <returns>A populated DataBlock object.</returns>
+        </member>
+        <member name="M:ContainerFS.DataBlock.FromPosition(System.IO.FileStream,System.Int32,System.Int64,SyslogLogging.LoggingModule)">
+            <summary>
+            Creates a new data block instance from a position within the container file.
+            </summary>
+            <param name="fs">The FileStream instance to use.</param>
+            <param name="blockSize">The block size, in bytes.</param>
+            <param name="position">The position of the data within the container file.</param>
+            <param name="logging">Instance of LoggingModule to use for logging events.</param>
+            <returns>A populated DataBlock object.</returns>
+        </member>
+        <member name="T:ContainerFS.MetadataBlock">
+            <summary>
+            Block of metadata.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.MetadataBlock.Filestream">
+            <summary>
+            The FileStream used to interact with the container file.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.MetadataBlock.Signature">
+            <summary>
+            The first four bytes of the block.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.MetadataBlock.ParentBlock">
+            <summary>
+            The position of the parent block.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.MetadataBlock.ChildDataBlock">
+            <summary>
+            The position of the child data block.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.MetadataBlock.FullDataLength">
+            <summary>
+            The full length of the data represented by this metadata block.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.MetadataBlock.LocalDataLength">
+            <summary>
+            The amount of data written to this block.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.MetadataBlock.IsDirectory">
+            <summary>
+            Indicates if this metadata block describes a directory.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.MetadataBlock.IsFile">
+            <summary>
+            Indicates if this metadata block describes a file.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.MetadataBlock.Name">
+            <summary>
+            The name of the file or directory.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.MetadataBlock.CreatedUtc">
+            <summary>
+            The UTC time when the object was created.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.MetadataBlock.LastUpdateUtc">
+            <summary>
+            The UTC time when the object was last updated
+            </summary>
+        </member>
+        <member name="P:ContainerFS.MetadataBlock.Data">
+            <summary>
+            Byte data stored in this block.
+            </summary>
+        </member>
+        <member name="F:ContainerFS.MetadataBlock.SignatureBytes">
+            <summary>
+            The signature found in the first four bytes of a metadata block.
+            </summary>
+        </member>
+        <member name="F:ContainerFS.MetadataBlock.BytesReservedPerBlock">
+            <summary>
+            The number of bytes reserved at the beginning of a block for metadata.
+            </summary>
+        </member>
+        <member name="M:ContainerFS.MetadataBlock.#ctor">
+            <summary>
+            Parameterless constructor.  Please do not use.
+            </summary>
+        </member>
+        <member name="M:ContainerFS.MetadataBlock.#ctor(System.IO.FileStream,System.Int32,System.Int64,System.Int64,System.Int64,System.Int32,System.Int32,System.String,System.Byte[],SyslogLogging.LoggingModule)">
+            <summary>
+            Create a new metadata block.
+            </summary>
+            <param name="fs">The FileStream instance to use.</param>
+            <param name="blockSize">The block size, in bytes.</param>
+            <param name="parentBlock">The position of the parent block.</param>
+            <param name="childDataBlock">The position of the child data block.</param>
+            <param name="fullDataLength">The full length of the data represented by this metadata block.</param>
+            <param name="isDirectory">Indicates if this metadata block describes a directory.</param>
+            <param name="isFile">Indicates if this metadata block describes a file.</param>
+            <param name="name">The name of the file or directory.</param>
+            <param name="data">Byte data stored in this block.</param>
+            <param name="logging">Instance of LoggingModule to use for logging events.</param>
+        </member>
+        <member name="M:ContainerFS.MetadataBlock.ToString">
+            <summary>
+            Return a user-readable string containing details about the block.
+            </summary>
+            <returns>String.</returns>
+        </member>
+        <member name="M:ContainerFS.MetadataBlock.ToBytes">
+            <summary>
+            Create a formatted byte array containing the block.
+            </summary>
+            <returns>Byte array.</returns>
+        </member>
+        <member name="M:ContainerFS.MetadataBlock.GetMetadataBlocks">
+            <summary>
+            Retieve the positions of all linked metadata entries found in this block and associated child data blocks.
+            </summary>
+            <returns>Array of Long.</returns>
+        </member>
+        <member name="M:ContainerFS.MetadataBlock.GetAllData">
+            <summary>
+            Retrieve all byte data contained in this block and associated child data blocks.
+            </summary>
+            <returns>Byte array.</returns>
+        </member>
+        <member name="M:ContainerFS.MetadataBlock.GetData(System.Int64,System.Int64)">
+            <summary>
+            Retrieve data from the specified range.
+            </summary>
+            <param name="startPosition">The starting position from which to read.</param>
+            <param name="count">The number of bytes to read.</param>
+            <returns>Byte data for the requested range.</returns>
+        </member>
+        <member name="M:ContainerFS.MetadataBlock.GetDataBlockCount">
+            <summary>
+            Retrieve the number of data blocks associated with the metadata object.
+            </summary>
+            <returns>Long.</returns>
+        </member>
+        <member name="M:ContainerFS.MetadataBlock.FromBytes(System.IO.FileStream,System.Int32,System.Byte[],SyslogLogging.LoggingModule)">
+            <summary>
+            Create a new metadata block instance from a byte array from data found within the container file.
+            </summary>
+            <param name="fs">The FileStream instance to use.</param>
+            <param name="blockSize">The block size, in bytes.</param>
+            <param name="ba">The byte array containing the full block.</param>
+            <param name="logging">Instance of LoggingModule to use for logging events.</param>
+            <returns>A populated MetadataBlock object.</returns>
+        </member>
+        <member name="M:ContainerFS.MetadataBlock.FromPosition(System.IO.FileStream,System.Int32,System.Int64,SyslogLogging.LoggingModule)">
+            <summary>
+            Creates a new metadata block instance from a position within the container file.
+            </summary>
+            <param name="fs">The FileStream instance to use.</param>
+            <param name="blockSize">The block size, in bytes.</param>
+            <param name="position">The position of the data within the container file.</param>
+            <param name="logging">Instance of LoggingModule to use for logging events.</param>
+            <returns>A populated MetadataBlock object.</returns>
+        </member>
+    </members>
+</doc>

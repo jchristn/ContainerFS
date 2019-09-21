@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.1</Version>
+    <Version>1.1.3</Version>
     <Authors>Joel Christner</Authors>
     <Description>Self-contained single-user file system written in C#.</Description>
     <Copyright>(c)2019 Joel Christner</Copyright>
@@ -11,13 +11,22 @@
     <PackageProjectUrl>https://github.com/jchristn/containerfs</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jchristn/containerfs</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
-    <PackageIconUrl></PackageIconUrl>
-    <PackageLicenseUrl>https://github.com/jchristn/ContainerFS/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/jchristn/containerfs/master/assets/icon.ico</PackageIconUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageReleaseNotes>Retarget to .NET Core 2.0 and .NET Framework 4.5.2</PackageReleaseNotes>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <DocumentationFile>C:\Code\Misc\ContainerFS\ContainerFS\ContainerFS.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Docs\Roadmap.txt" />
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

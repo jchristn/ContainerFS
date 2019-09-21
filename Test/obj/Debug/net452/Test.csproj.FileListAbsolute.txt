@@ -1,0 +1,13 @@
+C:\Code\Misc\ContainerFS\Test\bin\Debug\net452\Test.exe.config
+C:\Code\Misc\ContainerFS\Test\bin\Debug\net452\Test.exe
+C:\Code\Misc\ContainerFS\Test\bin\Debug\net452\Test.pdb
+C:\Code\Misc\ContainerFS\Test\bin\Debug\net452\LoggingModule.dll
+C:\Code\Misc\ContainerFS\Test\bin\Debug\net452\ContainerFS.dll
+C:\Code\Misc\ContainerFS\Test\bin\Debug\net452\ContainerFS.pdb
+C:\Code\Misc\ContainerFS\Test\obj\Debug\net452\Test.csprojAssemblyReference.cache
+C:\Code\Misc\ContainerFS\Test\obj\Debug\net452\Test.csproj.CoreCompileInputs.cache
+C:\Code\Misc\ContainerFS\Test\obj\Debug\net452\Test.AssemblyInfoInputs.cache
+C:\Code\Misc\ContainerFS\Test\obj\Debug\net452\Test.AssemblyInfo.cs
+C:\Code\Misc\ContainerFS\Test\obj\Debug\net452\Test.csproj.CopyComplete
+C:\Code\Misc\ContainerFS\Test\obj\Debug\net452\Test.exe
+C:\Code\Misc\ContainerFS\Test\obj\Debug\net452\Test.pdb

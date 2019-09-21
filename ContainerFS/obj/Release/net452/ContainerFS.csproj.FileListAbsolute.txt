@@ -7,3 +7,4 @@ C:\code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.AssemblyInfo
 C:\code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.csproj.CopyComplete
 C:\code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.dll
 C:\code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.pdb
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.csprojAssemblyReference.cache

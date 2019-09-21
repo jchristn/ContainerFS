@@ -13,9 +13,9 @@ For a sample app exercising ContainerFS and a CLI tool, please see the embedded 
 
 First things first - do you need help or have feedback?  Contact me at joel dot christner at gmail dot com or file an issue here!
 
-## New in v1.1.1
+## New in v1.1.3
 
-- Retarget to .NET Core 2.0 and .NET Framework 4.5.2
+- XML documentation
 
 ## Description
 
@@ -120,11 +120,4 @@ mono --server myapp.exe
 
 ## Version history
 
-Notes from previous versions (starting with v1.0.0) will be moved here.
-
-v1.1.x
-- Include file size in enumeration
-- Range read support
-
-v1.0.x
-- first release
+Refer to CHANGELOG.md

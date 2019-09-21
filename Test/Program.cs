@@ -262,7 +262,7 @@ namespace TestNetCore
                             {
                                 Console.WriteLine(
                                     "Bytes (hex):" + Environment.NewLine +
-                                    CfsCommon.BytesToHexString(c.ReadRawBlock(position)));
+                                    BytesToHexString(c.ReadRawBlock(position)));
                             }
                             catch (IOException e) { Console.WriteLine("Exception: " + e.Message); }
                             break;
@@ -496,6 +496,13 @@ namespace TestNetCore
             }
 
             return ret;
+        }
+
+        private static string BytesToHexString(byte[] data)
+        {
+            if (data == null || data.Length < 1) return null;
+            string hex = BitConverter.ToString(data);
+            return hex.Replace("-", "");
         }
     }
 }
