@@ -1,9 +1,6 @@
 # ContainerFS
 
-[![][nuget-img]][nuget]
-
-[nuget]:     https://www.nuget.org/packages/ContainerFS/
-[nuget-img]: https://badge.fury.io/nu/Object.svg
+[![NuGet Version](https://img.shields.io/nuget/v/ContainerFS.svg?style=flat)](https://www.nuget.org/packages/ContainerFS/) [![NuGet](https://img.shields.io/nuget/dt/ContainerFS.svg)](https://www.nuget.org/packages/ContainerFS) 
 
 Self-contained container file system
 
