@@ -24,13 +24,13 @@ Core use cases for ContainerFS:
 ## Important notes
 
 ContainerFS is still early in development and there are a large number of performance, scalability, consistency, and efficiency optimizations we wish to make.  While we have high aspirations on performance, please be aware it's not there yet.  Some items on our roadmap:
-- multi-user support
-- journaling for crash consistency
+- Multi-user support
+- Journaling for crash consistency
 
 ## Simple example
 
 Refer to the Test project for a thorough example.
-```
+```csharp
 using ContainerFS;
 ...
 // create a new container
@@ -46,10 +46,7 @@ Console.WriteLine(c.ToString());
 
 // enumerate a directory
 // use Linux-style paths, i.e. / or /foo/bar
-List<string> Files;
-List<string> subdirs;
-long position;
-c.ReadDirectory(path, out files, out subdirs, out position);
+c.ReadDirectory("/foo/bar", out List<string> files, out List<string> subdirs, out long position);
 
 // write a file
 byte[] writeData = Encoding.UTF8.GetBytes("Hello, world!");
