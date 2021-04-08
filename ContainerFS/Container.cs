@@ -857,7 +857,7 @@ namespace ContainerFS
             {
                 foreach (Tuple<string, long> curr in files)
                 {
-                    if (String.Compare(curr.Item1.ToLower().Trim(), curr.Item1.ToLower().Trim()) == 0)
+                    if (String.Compare(curr.Item1.ToLower().Trim(), name.ToLower().Trim()) == 0)
                     {
                         LogDebug("FileExists " + name + " exists in path " + path);
                         return true;
