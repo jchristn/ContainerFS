@@ -1,0 +1,15 @@
+C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\net5.0\Assets\icon.ico
+C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\net5.0\Assets\icon.png
+C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\net5.0\ContainerFS.xml
+C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\net5.0\ContainerFS.deps.json
+C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\net5.0\ContainerFS.dll
+C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\net5.0\ref\ContainerFS.dll
+C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\net5.0\ContainerFS.pdb
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net5.0\ContainerFS.csprojAssemblyReference.cache
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net5.0\ContainerFS.GeneratedMSBuildEditorConfig.editorconfig
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net5.0\ContainerFS.AssemblyInfoInputs.cache
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net5.0\ContainerFS.AssemblyInfo.cs
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net5.0\ContainerFS.csproj.CoreCompileInputs.cache
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net5.0\ContainerFS.dll
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net5.0\ref\ContainerFS.dll
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net5.0\ContainerFS.pdb

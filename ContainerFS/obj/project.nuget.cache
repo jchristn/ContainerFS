@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "p0gzll46JAdkg8wl/PfNBAt66XbK6K8v3lazxF1ORQSivV+bvJ9DYHYUt05zPe2VK4x9YKDwSI7FV+0JHyMl8Q==",
+  "success": true,
+  "projectFilePath": "C:\\Code\\Misc\\ContainerFS\\ContainerFS\\ContainerFS.csproj",
+  "expectedPackageFiles": [
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
+    "C:\\Users\\joelc\\.nuget\\packages\\sysloglogging\\2.0.1.3\\sysloglogging.2.0.1.3.nupkg.sha512"
+  ],
+  "logs": []
+}

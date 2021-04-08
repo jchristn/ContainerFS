@@ -9,7 +9,37 @@
             Self-contained file system.
             </summary>
         </member>
-        <member name="F:ContainerFS.Container.SignatureBytes">
+        <member name="P:ContainerFS.Container.Name">
+            <summary>
+            Name of the container.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.Container.BlockCount">
+            <summary>
+            Total number of blocks in the container.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.Container.BlockSize">
+            <summary>
+            Block size in bytes.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.Container.UnusedBlocks">
+            <summary>
+            Number of unused, unallocated blocks.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.Container.TotalSize">
+            <summary>
+            Total capacity of the container.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.Container.FreeSize">
+            <summary>
+            Total available unused capacity of the container.
+            </summary>
+        </member>
+        <member name="P:ContainerFS.Container.SignatureBytes">
             <summary>
             The signature found in the first four bytes of a container header block.
             </summary>
@@ -34,30 +64,6 @@
             User-readable string containing details about the container.
             </summary>
             <returns>User-readable string containing details about the container.</returns>
-        </member>
-        <member name="M:ContainerFS.Container.GetTotalBlocks">
-            <summary>
-            Retrieve the total number of blocks in the container.
-            </summary>
-            <returns>Integer.</returns>
-        </member>
-        <member name="M:ContainerFS.Container.GetUnusedBlocks">
-            <summary>
-            Retrieve the number of unused, unallocated blocks in the container.
-            </summary>
-            <returns>Integer.</returns>
-        </member>
-        <member name="M:ContainerFS.Container.GetTotalSpace">
-            <summary>
-            Retrieve the total capacity of the container.
-            </summary>
-            <returns>Long.</returns>
-        </member>
-        <member name="M:ContainerFS.Container.GetFreeSpace">
-            <summary>
-            Retrieve the total unallocated, unused capacity of the container.
-            </summary>
-            <returns>Long.</returns>
         </member>
         <member name="M:ContainerFS.Container.ReadRawBlockByIndex(System.Int32)">
             <summary>
@@ -184,12 +190,12 @@
             Byte data stored in this block.
             </summary>
         </member>
-        <member name="F:ContainerFS.DataBlock.SignatureBytes">
+        <member name="P:ContainerFS.DataBlock.SignatureBytes">
             <summary>
             The signature found in the first four bytes of a data block.
             </summary>
         </member>
-        <member name="F:ContainerFS.DataBlock.BytesReservedPerBlock">
+        <member name="P:ContainerFS.DataBlock.BytesReservedPerBlock">
             <summary>
             The number of bytes reserved at the beginning of a block for metadata.
             </summary>
@@ -311,12 +317,12 @@
             Byte data stored in this block.
             </summary>
         </member>
-        <member name="F:ContainerFS.MetadataBlock.SignatureBytes">
+        <member name="P:ContainerFS.MetadataBlock.SignatureBytes">
             <summary>
             The signature found in the first four bytes of a metadata block.
             </summary>
         </member>
-        <member name="F:ContainerFS.MetadataBlock.BytesReservedPerBlock">
+        <member name="P:ContainerFS.MetadataBlock.BytesReservedPerBlock">
             <summary>
             The number of bytes reserved at the beginning of a block for metadata.
             </summary>

@@ -14,14 +14,6 @@ namespace ContainerFS
     /// </summary>
     public class MetadataBlock
     {
-        #region Private-Members
-
-        private LoggingModule Logging;
-        private int BlockSizeBytes { get; set; }
-        private string DateTimeFormat = "MM/dd/yyyy HH:mm:ss.ffffff";
-        
-        #endregion
-
         #region Public-Members
 
         /// <summary>
@@ -86,17 +78,26 @@ namespace ContainerFS
 
         #endregion
 
+        #region Private-Members
+
+        private string _Header = "[ContainerFS.Metadata] ";
+        private LoggingModule _Logging = null;
+        private int _BlockSize = 4096;
+        private string _TimestampFormat = "MM/dd/yyyy HH:mm:ss.ffffff";
+        
+        #endregion
+
         #region Static-Members
 
         /// <summary>
         /// The signature found in the first four bytes of a metadata block.
         /// </summary>
-        public static byte[] SignatureBytes = new byte[4] { 0x0F, 0x0F, 0x0F, 0x0F };
+        public static byte[] SignatureBytes { get; } = new byte[4] { 0x0F, 0x0F, 0x0F, 0x0F };
         
         /// <summary>
         /// The number of bytes reserved at the beginning of a block for metadata.
         /// </summary>
-        public static int BytesReservedPerBlock = 512;
+        public static int BytesReservedPerBlock { get; } = 512;
 
         #endregion
 
@@ -140,8 +141,8 @@ namespace ContainerFS
             if (!CfsCommon.IsTrue(isFile) && !CfsCommon.IsTrue(isDirectory)) throw new ArgumentException("Either isFile or isDirectory must be set");
             if (CfsCommon.IsTrue(isFile) && CfsCommon.IsTrue(isDirectory)) throw new ArgumentException("Only one of isFile and isDirectory must be set");
 
-            Logging = logging;
-            BlockSizeBytes = blockSize;
+            _Logging = logging;
+            _BlockSize = blockSize;
             ParentBlock = parentBlock;
             ChildDataBlock = childDataBlock;
 
@@ -154,8 +155,8 @@ namespace ContainerFS
             IsFile = isFile;
             Name = name;
             DateTime ts = DateTime.Now.ToUniversalTime();
-            CreatedUtc = ts.ToString(DateTimeFormat);
-            LastUpdateUtc = ts.ToString(DateTimeFormat);
+            CreatedUtc = ts.ToString(_TimestampFormat);
+            LastUpdateUtc = ts.ToString(_TimestampFormat);
         }
 
         #endregion
@@ -190,47 +191,34 @@ namespace ContainerFS
         /// <returns>Byte array.</returns>
         public byte[] ToBytes()
         {
-            try
-            {
-                byte[] ret = CfsCommon.InitByteArray(BlockSizeBytes, 0x00);
-                Buffer.BlockCopy(MetadataBlock.SignatureBytes, 0, ret, 0, 4);
-                Buffer.BlockCopy(BitConverter.GetBytes(ParentBlock), 0, ret, 4, 8);
-                Buffer.BlockCopy(BitConverter.GetBytes(ChildDataBlock), 0, ret, 12, 8);
-                Buffer.BlockCopy(BitConverter.GetBytes(FullDataLength), 0, ret, 20, 4);
-                Buffer.BlockCopy(BitConverter.GetBytes(LocalDataLength), 0, ret, 28, 4);
-                Buffer.BlockCopy(BitConverter.GetBytes(IsDirectory), 0, ret, 32, 4);
-                Buffer.BlockCopy(BitConverter.GetBytes(IsFile), 0, ret, 36, 4);
+            byte[] ret = CfsCommon.InitByteArray(_BlockSize, 0x00);
+            Buffer.BlockCopy(MetadataBlock.SignatureBytes, 0, ret, 0, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(ParentBlock), 0, ret, 4, 8);
+            Buffer.BlockCopy(BitConverter.GetBytes(ChildDataBlock), 0, ret, 12, 8);
+            Buffer.BlockCopy(BitConverter.GetBytes(FullDataLength), 0, ret, 20, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(LocalDataLength), 0, ret, 28, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(IsDirectory), 0, ret, 32, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(IsFile), 0, ret, 36, 4);
 
-                if (Name.Length > 256) Name = Name.Substring(0, 256);
-                byte[] nameByteArray = Encoding.UTF8.GetBytes(Name);
-                byte[] nameBytesFixed = new byte[256];
-                Buffer.BlockCopy(nameByteArray, 0, nameBytesFixed, 0, nameByteArray.Length);
-                Buffer.BlockCopy(nameBytesFixed, 0, ret, 40, 256);
+            if (Name.Length > 256) Name = Name.Substring(0, 256);
+            byte[] nameByteArray = Encoding.UTF8.GetBytes(Name);
+            byte[] nameBytesFixed = new byte[256];
+            Buffer.BlockCopy(nameByteArray, 0, nameBytesFixed, 0, nameByteArray.Length);
+            Buffer.BlockCopy(nameBytesFixed, 0, ret, 40, 256);
 
-                byte[] tsByteArray = Encoding.UTF8.GetBytes(CreatedUtc);
-                byte[] tsBytesFixed = CfsCommon.InitByteArray(32, 0x00);
-                Buffer.BlockCopy(tsByteArray, 0, tsBytesFixed, 0, tsByteArray.Length);
-                Buffer.BlockCopy(tsBytesFixed, 0, ret, 296, 32);
+            byte[] tsByteArray = Encoding.UTF8.GetBytes(CreatedUtc);
+            byte[] tsBytesFixed = CfsCommon.InitByteArray(32, 0x00);
+            Buffer.BlockCopy(tsByteArray, 0, tsBytesFixed, 0, tsByteArray.Length);
+            Buffer.BlockCopy(tsBytesFixed, 0, ret, 296, 32);
 
-                tsByteArray = Encoding.UTF8.GetBytes(LastUpdateUtc);
-                tsBytesFixed = CfsCommon.InitByteArray(32, 0x00);
-                Buffer.BlockCopy(tsByteArray, 0, tsBytesFixed, 0, tsByteArray.Length);
-                Buffer.BlockCopy(tsBytesFixed, 0, ret, 328, 32);
+            tsByteArray = Encoding.UTF8.GetBytes(LastUpdateUtc);
+            tsBytesFixed = CfsCommon.InitByteArray(32, 0x00);
+            Buffer.BlockCopy(tsByteArray, 0, tsBytesFixed, 0, tsByteArray.Length);
+            Buffer.BlockCopy(tsBytesFixed, 0, ret, 328, 32);
 
-                if (Data != null)
-                {
-                    LogDebug("ToBytes copying data of length " + Data.Length + " to position 512");
-                    Buffer.BlockCopy(Data, 0, ret, 512, Data.Length);
-                }
+            if (Data != null) Buffer.BlockCopy(Data, 0, ret, 512, Data.Length);
 
-                return ret;
-            }
-            catch (Exception e)
-            {
-                if (Logging != null) Logging.LogException("MetadataBlock", "ToBytes", e);
-                else LoggingModule.ConsoleException("MetadataBlock", "ToBytes", e);
-                throw;
-            }
+            return ret;
         }
 
         /// <summary>
@@ -262,7 +250,7 @@ namespace ContainerFS
             {
                 LogDebug("GetMetadataBlocks child data block referenced at " + ChildDataBlock);
                 byte[] nextBlockBytes = CfsCommon.ReadFromPosition(Filestream, ChildDataBlock, 512);
-                MetadataBlock nextBlock = MetadataBlock.FromBytes(Filestream, BlockSizeBytes, nextBlockBytes, Logging);
+                MetadataBlock nextBlock = MetadataBlock.FromBytes(Filestream, _BlockSize, nextBlockBytes, _Logging);
                 nextBlock.Filestream = Filestream;
                 long[] childBlocks = nextBlock.GetMetadataBlocks();
 
@@ -292,7 +280,7 @@ namespace ContainerFS
             {
                 // get child data
                 byte[] nextBytes = CfsCommon.ReadFromPosition(Filestream, ChildDataBlock, 64);
-                DataBlock nextBlock = DataBlock.FromBytes(Filestream, BlockSizeBytes, nextBytes, Logging);
+                DataBlock nextBlock = DataBlock.FromBytes(Filestream, _BlockSize, nextBytes, _Logging);
                 nextBlock.Filestream = Filestream;
                 byte[] childData = nextBlock.GetAllData();
 
@@ -334,7 +322,7 @@ namespace ContainerFS
             {
                 // get child data
                 byte[] nextBytes = CfsCommon.ReadFromPosition(Filestream, ChildDataBlock, 64);
-                DataBlock nextBlock = DataBlock.FromBytes(Filestream, BlockSizeBytes, nextBytes, Logging);
+                DataBlock nextBlock = DataBlock.FromBytes(Filestream, _BlockSize, nextBytes, _Logging);
                 nextBlock.Filestream = Filestream;
                 byte[] childData = nextBlock.GetAllData();
 
@@ -370,7 +358,7 @@ namespace ContainerFS
             long currPosition = ChildDataBlock;
             while (true)
             {
-                DataBlock curr = DataBlock.FromPosition(Filestream, BlockSizeBytes, currPosition, Logging);
+                DataBlock curr = DataBlock.FromPosition(Filestream, _BlockSize, currPosition, _Logging);
                 if (curr == null)
                 {
                     LogDebug("GetDataBlockCount unable to retrieve data block at position " + currPosition);
@@ -397,17 +385,17 @@ namespace ContainerFS
 
         private void LogDebug(string msg)
         {
-            if (Logging != null) Logging.Log(LoggingModule.Severity.Debug, msg);
+            if (_Logging != null) _Logging.Debug(_Header + msg);
         }
 
         private void LogWarn(string msg)
         {
-            if (Logging != null) Logging.Log(LoggingModule.Severity.Warn, msg);
+            if (_Logging != null) _Logging.Warn(_Header + msg);
         }
 
         private void LogAlert(string msg)
         {
-            if (Logging != null) Logging.Log(LoggingModule.Severity.Alert, msg);
+            if (_Logging != null) _Logging.Alert(_Header + msg);
         }
 
         #endregion
@@ -424,72 +412,63 @@ namespace ContainerFS
         /// <returns>A populated MetadataBlock object.</returns>
         public static MetadataBlock FromBytes(FileStream fs, int blockSize, byte[] ba, LoggingModule logging)
         {
-            try
-            {
-                if (ba == null || ba.Length < 1) throw new ArgumentNullException(nameof(ba));
-                if (ba.Length < 64) throw new ArgumentException("Byte array has length less than 64");
-                if (blockSize < 4096) throw new ArgumentOutOfRangeException("Block size must be greater than or equal to 4096");
-                if (blockSize % 4096 != 0) throw new ArgumentOutOfRangeException("Block size must be evenly divisible by 4096");
-                if (fs == null) throw new ArgumentNullException(nameof(fs));
+            if (ba == null || ba.Length < 1) throw new ArgumentNullException(nameof(ba));
+            if (ba.Length < 64) throw new ArgumentException("Byte array has length less than 64");
+            if (blockSize < 4096) throw new ArgumentOutOfRangeException("Block size must be greater than or equal to 4096");
+            if (blockSize % 4096 != 0) throw new ArgumentOutOfRangeException("Block size must be evenly divisible by 4096");
+            if (fs == null) throw new ArgumentNullException(nameof(fs));
 
-                MetadataBlock ret = new MetadataBlock();
-                ret.Signature = MetadataBlock.SignatureBytes;
-                ret.BlockSizeBytes = blockSize;
-                ret.Logging = logging;
-                ret.Filestream = fs;
+            MetadataBlock ret = new MetadataBlock();
+            ret.Signature = MetadataBlock.SignatureBytes;
+            ret._BlockSize = blockSize;
+            ret._Logging = logging;
+            ret.Filestream = fs;
 
-                byte[] temp;
+            byte[] temp;
                 
-                Buffer.BlockCopy(ba, 0, ret.Signature, 0, 4);
+            Buffer.BlockCopy(ba, 0, ret.Signature, 0, 4);
          
-                temp = new byte[8];
-                Buffer.BlockCopy(ba, 4, temp, 0, 8);
-                ret.ParentBlock = BitConverter.ToInt64(temp, 0);
+            temp = new byte[8];
+            Buffer.BlockCopy(ba, 4, temp, 0, 8);
+            ret.ParentBlock = BitConverter.ToInt64(temp, 0);
 
-                temp = new byte[8];
-                Buffer.BlockCopy(ba, 12, temp, 0, 8);
-                ret.ChildDataBlock = BitConverter.ToInt64(temp, 0);
+            temp = new byte[8];
+            Buffer.BlockCopy(ba, 12, temp, 0, 8);
+            ret.ChildDataBlock = BitConverter.ToInt64(temp, 0);
 
-                temp = new byte[4];
-                Buffer.BlockCopy(ba, 20, temp, 0, 4);
-                ret.FullDataLength = BitConverter.ToInt32(temp, 0);
+            temp = new byte[4];
+            Buffer.BlockCopy(ba, 20, temp, 0, 4);
+            ret.FullDataLength = BitConverter.ToInt32(temp, 0);
 
-                temp = new byte[4];
-                Buffer.BlockCopy(ba, 28, temp, 0, 4);
-                ret.LocalDataLength = BitConverter.ToInt32(temp, 0);
+            temp = new byte[4];
+            Buffer.BlockCopy(ba, 28, temp, 0, 4);
+            ret.LocalDataLength = BitConverter.ToInt32(temp, 0);
 
-                temp = new byte[4];
-                Buffer.BlockCopy(ba, 32, temp, 0, 4);
-                ret.IsDirectory = BitConverter.ToInt32(temp, 0);
+            temp = new byte[4];
+            Buffer.BlockCopy(ba, 32, temp, 0, 4);
+            ret.IsDirectory = BitConverter.ToInt32(temp, 0);
 
-                temp = new byte[4];
-                Buffer.BlockCopy(ba, 36, temp, 0, 4);
-                ret.IsFile = BitConverter.ToInt32(temp, 0);
+            temp = new byte[4];
+            Buffer.BlockCopy(ba, 36, temp, 0, 4);
+            ret.IsFile = BitConverter.ToInt32(temp, 0);
 
-                temp = new byte[256];
-                Buffer.BlockCopy(ba, 40, temp, 0, 256);
-                ret.Name = Encoding.UTF8.GetString(CfsCommon.TrimNullBytes(temp)).Trim();
+            temp = new byte[256];
+            Buffer.BlockCopy(ba, 40, temp, 0, 256);
+            ret.Name = Encoding.UTF8.GetString(CfsCommon.TrimNullBytes(temp)).Trim();
 
-                temp = new byte[32];
-                Buffer.BlockCopy(ba, 296, temp, 0, 32);
-                ret.CreatedUtc = Encoding.UTF8.GetString(CfsCommon.TrimNullBytes(temp)).Trim();
+            temp = new byte[32];
+            Buffer.BlockCopy(ba, 296, temp, 0, 32);
+            ret.CreatedUtc = Encoding.UTF8.GetString(CfsCommon.TrimNullBytes(temp)).Trim();
 
-                temp = new byte[32];
-                Buffer.BlockCopy(ba, 328, temp, 0, 32);
-                ret.LastUpdateUtc = Encoding.UTF8.GetString(CfsCommon.TrimNullBytes(temp)).Trim();
+            temp = new byte[32];
+            Buffer.BlockCopy(ba, 328, temp, 0, 32);
+            ret.LastUpdateUtc = Encoding.UTF8.GetString(CfsCommon.TrimNullBytes(temp)).Trim();
 
-                temp = new byte[ret.LocalDataLength];
-                Buffer.BlockCopy(ba, 512, temp, 0, ret.LocalDataLength);
-                ret.Data = temp;
+            temp = new byte[ret.LocalDataLength];
+            Buffer.BlockCopy(ba, 512, temp, 0, ret.LocalDataLength);
+            ret.Data = temp;
 
-                return ret;
-            }
-            catch (Exception e)
-            {
-                if (logging != null) logging.LogException("MetadataBlock", "FromBytes", e);
-                else LoggingModule.ConsoleException("MetadataBlock", "FromBytes", e);
-                throw;
-            }
+            return ret;
         }
 
         /// <summary>
@@ -502,22 +481,13 @@ namespace ContainerFS
         /// <returns>A populated MetadataBlock object.</returns>
         public static MetadataBlock FromPosition(FileStream fs, int blockSize, long position, LoggingModule logging)
         {
-            try
-            {
-                if (position < 0) throw new ArgumentOutOfRangeException(nameof(position));
-                if (blockSize < 4096) throw new ArgumentOutOfRangeException("Block size must be greater than or equal to 4096");
-                if (blockSize % 4096 != 0) throw new ArgumentOutOfRangeException("Block size must be evenly divisible by 4096");
-                if (fs == null) throw new ArgumentNullException(nameof(fs));
+            if (position < 0) throw new ArgumentOutOfRangeException(nameof(position));
+            if (blockSize < 4096) throw new ArgumentOutOfRangeException("Block size must be greater than or equal to 4096");
+            if (blockSize % 4096 != 0) throw new ArgumentOutOfRangeException("Block size must be evenly divisible by 4096");
+            if (fs == null) throw new ArgumentNullException(nameof(fs));
 
-                byte[] data = CfsCommon.ReadFromPosition(fs, position, blockSize);
-                return FromBytes(fs, blockSize, data, logging);
-            }
-            catch (Exception e)
-            {
-                if (logging != null) logging.LogException("MetadataBlock", "FromPosition", e);
-                else LoggingModule.ConsoleException("MetadataBlock", "FromPosition", e);
-                throw;
-            }
+            byte[] data = CfsCommon.ReadFromPosition(fs, position, blockSize);
+            return FromBytes(fs, blockSize, data, logging);
         }
 
         #endregion

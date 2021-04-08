@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>ContainerFS</id>
+    <version>1.1.4</version>
+    <authors>Joel Christner</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">LICENSE.md</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <projectUrl>https://github.com/jchristn/containerfs</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/jchristn/containerfs/master/assets/icon.ico</iconUrl>
+    <description>Self-contained single-user file system written in C#.</description>
+    <releaseNotes>Retarget to .NET Core 2.0 and .NET Framework 4.5.2</releaseNotes>
+    <copyright>(c)2021 Joel Christner</copyright>
+    <tags>file system filesystem container object</tags>
+    <repository type="Github" url="https://github.com/jchristn/containerfs" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.5.2">
+        <dependency id="SyslogLogging" version="2.0.1.3" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETFramework4.6.1">
+        <dependency id="SyslogLogging" version="2.0.1.3" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETCoreApp3.1">
+        <dependency id="SyslogLogging" version="2.0.1.3" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net5.0">
+        <dependency id="SyslogLogging" version="2.0.1.3" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="SyslogLogging" version="2.0.1.3" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.1">
+        <dependency id="SyslogLogging" version="2.0.1.3" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <contentFiles>
+      <files include="any/net452/Docs/Roadmap.txt" buildAction="Content" />
+      <files include="any/net461/Docs/Roadmap.txt" buildAction="Content" />
+      <files include="any/net5.0/Docs/Roadmap.txt" buildAction="Content" />
+      <files include="any/netcoreapp3.1/Docs/Roadmap.txt" buildAction="Content" />
+      <files include="any/netstandard2.0/Docs/Roadmap.txt" buildAction="Content" />
+      <files include="any/netstandard2.1/Docs/Roadmap.txt" buildAction="Content" />
+    </contentFiles>
+  </metadata>
+  <files>
+    <file src="C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\net452\ContainerFS.dll" target="lib\net452\ContainerFS.dll" />
+    <file src="C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\net461\ContainerFS.dll" target="lib\net461\ContainerFS.dll" />
+    <file src="C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\net5.0\ContainerFS.dll" target="lib\net5.0\ContainerFS.dll" />
+    <file src="C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\netcoreapp3.1\ContainerFS.dll" target="lib\netcoreapp3.1\ContainerFS.dll" />
+    <file src="C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\netstandard2.0\ContainerFS.dll" target="lib\netstandard2.0\ContainerFS.dll" />
+    <file src="C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\netstandard2.0\ContainerFS.xml" target="lib\netstandard2.0\ContainerFS.xml" />
+    <file src="C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\netstandard2.1\ContainerFS.dll" target="lib\netstandard2.1\ContainerFS.dll" />
+    <file src="C:\Code\Misc\ContainerFS\ContainerFS\Docs\Roadmap.txt" target="content\Docs\Roadmap.txt" />
+    <file src="C:\Code\Misc\ContainerFS\ContainerFS\Docs\Roadmap.txt" target="contentFiles\any\net452\Docs\Roadmap.txt" />
+    <file src="C:\Code\Misc\ContainerFS\ContainerFS\Docs\Roadmap.txt" target="contentFiles\any\net461\Docs\Roadmap.txt" />
+    <file src="C:\Code\Misc\ContainerFS\ContainerFS\Docs\Roadmap.txt" target="contentFiles\any\net5.0\Docs\Roadmap.txt" />
+    <file src="C:\Code\Misc\ContainerFS\ContainerFS\Docs\Roadmap.txt" target="contentFiles\any\netcoreapp3.1\Docs\Roadmap.txt" />
+    <file src="C:\Code\Misc\ContainerFS\ContainerFS\Docs\Roadmap.txt" target="contentFiles\any\netstandard2.0\Docs\Roadmap.txt" />
+    <file src="C:\Code\Misc\ContainerFS\ContainerFS\Docs\Roadmap.txt" target="contentFiles\any\netstandard2.1\Docs\Roadmap.txt" />
+    <file src="C:\Code\Misc\ContainerFS\LICENSE.md" target="LICENSE.md" />
+  </files>
+</package>

@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net452;net461;netcoreapp3.1;net5.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.3</Version>
+    <Version>1.2.0</Version>
     <Authors>Joel Christner</Authors>
     <Description>Self-contained single-user file system written in C#.</Description>
-    <Copyright>(c)2019 Joel Christner</Copyright>
+    <Copyright>(c)2021 Joel Christner</Copyright>
     <PackageTags>file system filesystem container object</PackageTags>
     <PackageProjectUrl>https://github.com/jchristn/containerfs</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jchristn/containerfs</RepositoryUrl>
@@ -17,8 +17,12 @@
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <DocumentationFile>ContainerFS.xml</DocumentationFile>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-    <DocumentationFile>C:\Code\Misc\ContainerFS\ContainerFS\ContainerFS.xml</DocumentationFile>
+    <DocumentationFile>ContainerFS.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,7 +38,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SyslogLogging" Version="1.0.10" />
+    <PackageReference Include="SyslogLogging" Version="2.0.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ContainerFS.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

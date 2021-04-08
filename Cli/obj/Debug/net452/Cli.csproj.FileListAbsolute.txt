@@ -1,3 +1,6 @@
+C:\Code\Misc\ContainerFS\Cli\bin\Debug\net452\Assets\icon.ico
+C:\Code\Misc\ContainerFS\Cli\bin\Debug\net452\Assets\icon.png
+C:\Code\Misc\ContainerFS\Cli\bin\Debug\net452\ContainerFS.xml
 C:\Code\Misc\ContainerFS\Cli\bin\Debug\net452\cfs.exe.config
 C:\Code\Misc\ContainerFS\Cli\bin\Debug\net452\cfs.exe
 C:\Code\Misc\ContainerFS\Cli\bin\Debug\net452\cfs.pdb
@@ -5,9 +8,9 @@ C:\Code\Misc\ContainerFS\Cli\bin\Debug\net452\LoggingModule.dll
 C:\Code\Misc\ContainerFS\Cli\bin\Debug\net452\ContainerFS.dll
 C:\Code\Misc\ContainerFS\Cli\bin\Debug\net452\ContainerFS.pdb
 C:\Code\Misc\ContainerFS\Cli\obj\Debug\net452\Cli.csprojAssemblyReference.cache
-C:\Code\Misc\ContainerFS\Cli\obj\Debug\net452\Cli.csproj.CoreCompileInputs.cache
 C:\Code\Misc\ContainerFS\Cli\obj\Debug\net452\Cli.AssemblyInfoInputs.cache
 C:\Code\Misc\ContainerFS\Cli\obj\Debug\net452\Cli.AssemblyInfo.cs
+C:\Code\Misc\ContainerFS\Cli\obj\Debug\net452\Cli.csproj.CoreCompileInputs.cache
 C:\Code\Misc\ContainerFS\Cli\obj\Debug\net452\Cli.csproj.CopyComplete
 C:\Code\Misc\ContainerFS\Cli\obj\Debug\net452\cfs.exe
 C:\Code\Misc\ContainerFS\Cli\obj\Debug\net452\cfs.pdb

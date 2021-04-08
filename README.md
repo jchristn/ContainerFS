@@ -104,6 +104,10 @@ Delete a file:
 cfs container.cfs delete --file=/temp.txt
 ```
 
+## Community
+
+Special thanks to community members including @liesauer for making the project better!
+
 ## Running under Mono
 
 ContainerFS works well in Mono environments to the extent that we have tested it.  It is recommended that when running under Mono, you execute the containing EXE using --server and after using the Mono Ahead-of-Time Compiler (AOT).

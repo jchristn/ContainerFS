@@ -50,16 +50,14 @@ namespace TestNetCore
                             Console.Write("           Name : ");
                             userInput = Console.ReadLine();
                             if (String.IsNullOrEmpty(userInput)) continue;
-                            containerFilename = String.Copy(userInput);
-                            c = new Container(containerFilename, containerFilename, 4096, 4096, logging);
+                            c = new Container(userInput, userInput, 4096, 4096, logging);
                             break;
 
                         case "existing":
                             Console.Write("           Name : ");
                             userInput = Console.ReadLine();
                             if (String.IsNullOrEmpty(userInput)) continue;
-                            containerFilename = String.Copy(userInput);
-                            c = Container.FromFile(containerFilename, logging);
+                            c = Container.FromFile(userInput, logging);
                             break;
 
                         default:
@@ -69,6 +67,7 @@ namespace TestNetCore
                     break;
                 }
 
+                containerFilename = userInput;
                 Console.WriteLine(c.ToString());
 
                 #endregion

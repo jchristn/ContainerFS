@@ -14,22 +14,98 @@ namespace ContainerFS
     /// </summary>
     public class Container
     {
+        #region Public-Members
+
+        /// <summary>
+        /// Name of the container.
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return _Name;
+            }
+        }
+
+        /// <summary>
+        /// Total number of blocks in the container.
+        /// </summary>
+        public int BlockCount
+        {
+            get
+            {
+                return _BlockCount;
+            }
+        }
+
+        /// <summary>
+        /// Block size in bytes.
+        /// </summary>
+        public int BlockSize
+        {
+            get
+            {
+                return _BlockSize;
+            }
+        }
+
+        /// <summary>
+        /// Number of unused, unallocated blocks.
+        /// </summary>
+        public int UnusedBlocks
+        {
+            get
+            {
+                int unused = 0;
+                for (int i = 0; i < _BlockCount; i++)
+                {
+                    if (_UnusedBlocks[i]) unused++;
+                }
+                return unused;
+            }
+        }
+
+        /// <summary>
+        /// Total capacity of the container.
+        /// </summary>
+        public long TotalSize
+        {
+            get
+            {
+                return BlockCount * BlockSize;
+            }
+        }
+
+        /// <summary>
+        /// Total available unused capacity of the container.
+        /// </summary>
+        public long FreeSize
+        {
+            get
+            {
+                return UnusedBlocks * BlockSize;
+            }
+        }
+
+        #endregion
+
         #region Private-Members
 
-        private string Filename { get; set; }     
-        private long TotalSizeBytes { get; set; }
-        private long CurrentFileSizeBytes { get; set; }
-        private FileStream Filestream { get; set; }
-        private BitArray UnusedBlocks { get; set; }      // (blockCount / 8) @ 1024
-        private LoggingModule Logging { get; set; }
-        private string DateTimeFormat = "MM/dd/yyyy HH:mm:ss.ffffff";
+        private string _Header = "[ContainerFS] ";
+        private string _Filename = null;
+        private long _TotalSize = 0;
+        private long _CurrentFileSize = 0;
+        private FileStream _FileStream = null;
+        private BitArray _UnusedBlocks = null;     // (blockCount / 8) @ 1024
+        private LoggingModule _Logging = null;
+        private string _TimestampFormat = "MM/dd/yyyy HH:mm:ss.ffffff";
 
-        private byte[] Signature { get; set; }           // 4 bytes @ 0
-        private int Version { get; set; }                // 4 bytes @ 8
-        private string Name { get; set; }                // max 256 bytes @ 16 
-        private int BlockSizeBytes { get; set; }         // 4 bytes @ 288 
-        private int BlockCount { get; set; }             // 4 bytes @ 296 
-        private string CreatedUtc { get; set; }        // 32 bytes @ 304
+        private byte[] _Signature = null;          // 4 bytes @ 0
+        private int _Version = 0;                  // 4 bytes @ 8
+        private string _Name = null;               // max 256 bytes @ 16 
+        private int _BlockSize = 4096;        // 4 bytes @ 288 
+        private int _BlockCount = 4096;            // 4 bytes @ 296 
+        private string _CreatedUtc = null;         // 32 bytes @ 304
 
         #endregion
 
@@ -38,7 +114,7 @@ namespace ContainerFS
         /// <summary>
         /// The signature found in the first four bytes of a container header block.
         /// </summary>
-        public static byte[] SignatureBytes = new byte[4] { 0x01, 0x01, 0x01, 0x01 };
+        public static byte[] SignatureBytes { get; } = new byte[4] { 0x01, 0x01, 0x01, 0x01 };
 
         #endregion
 
@@ -59,7 +135,7 @@ namespace ContainerFS
         /// <param name="blockSize">The block size, in bytes.</param>
         /// <param name="blockCount">The number of blocks.</param>
         /// <param name="loggingEnable">Whether or not you wish to have log statements sent to the console and localhost syslog.</param>
-        public Container(string filename, string name, int blockSize, int blockCount, bool loggingEnable)
+        public Container(string filename, string name, int blockSize = 4096, int blockCount = 65536, bool loggingEnable = false)
         {
             #region Check-Inputs
 
@@ -76,33 +152,41 @@ namespace ContainerFS
 
             #region Initialize-Logging
 
-            if (loggingEnable) Logging = new LoggingModule("127.0.0.1", 514, true, LoggingModule.Severity.Debug, false, true, true, true, true, true);
-            else Logging = null;
+            if (loggingEnable)
+            {
+                _Logging = new LoggingModule("127.0.0.1", 514);
+                _Logging.Settings.EnableConsole = true;
+                _Logging.Settings.EnableColors = true;
+            }
+            else
+            {
+                _Logging = null;
+            }
 
             #endregion
 
             #region Set-Values
 
-            Filename = filename;
-            TotalSizeBytes = (blockSize * blockCount);
-            Filestream = new FileStream(filename, FileMode.CreateNew);
-            CurrentFileSizeBytes = (blockSize * 256);
+            _Filename = filename;
+            _TotalSize = (blockSize * blockCount);
+            _FileStream = new FileStream(filename, FileMode.CreateNew);
+            _CurrentFileSize = (blockSize * 256);
             SetFileSize(blockSize * 256);
-            Version = 1;
-            Name = name;
-            BlockSizeBytes = blockSize;
-            BlockCount = blockCount;
-            CreatedUtc = DateTime.Now.ToUniversalTime().ToString(DateTimeFormat);
+            _Version = 1;
+            _Name = name;
+            _BlockSize = blockSize;
+            _BlockCount = blockCount;
+            _CreatedUtc = DateTime.Now.ToUniversalTime().ToString(_TimestampFormat);
 
             #endregion
 
             #region Set-Unused-Blocks-Map
 
-            UnusedBlocks = new BitArray(blockCount);
+            _UnusedBlocks = new BitArray(blockCount);
             for (int i = 0; i < blockCount; i++)
             {
-                if (i > 1) UnusedBlocks[i] = true;
-                else UnusedBlocks[i] = false;
+                if (i > 1) _UnusedBlocks[i] = true;
+                else _UnusedBlocks[i] = false;
             }
             
             #endregion
@@ -110,13 +194,13 @@ namespace ContainerFS
             #region Initialize-File
 
             // block 0: header
-            CfsCommon.WriteAtPosition(Filestream, 0, ToBytes());
+            CfsCommon.WriteAtPosition(_FileStream, 0, ToBytes());
             SetBlockUsed(0);
 
             // block 1: root
             long rootPosition = blockSize;
-            MetadataBlock rootMetadataBlock = new MetadataBlock(Filestream, blockSize, 0, -1, 0, 1, 0, ".", null, Logging);
-            CfsCommon.WriteAtPosition(Filestream, rootPosition, rootMetadataBlock.ToBytes());
+            MetadataBlock rootMetadataBlock = new MetadataBlock(_FileStream, blockSize, 0, -1, 0, 1, 0, ".", null, _Logging);
+            CfsCommon.WriteAtPosition(_FileStream, rootPosition, rootMetadataBlock.ToBytes());
             SetBlockUsed(1);
 
             #endregion
@@ -137,58 +221,15 @@ namespace ContainerFS
         {
             string ret = "---" + Environment.NewLine;
             ret += "Container Header: " + Environment.NewLine;
-            ret += "  Version       : " + Version + Environment.NewLine;
+            ret += "  Version       : " + _Version + Environment.NewLine;
             ret += "  Name          : " + Name + Environment.NewLine;
-            ret += "  Block Size    : " + BlockSizeBytes + " bytes" + Environment.NewLine;
+            ret += "  Block Size    : " + BlockSize + " bytes" + Environment.NewLine;
             ret += "  Block Count   : " + BlockCount + Environment.NewLine;
-            ret += "  Unused Blocks : " + GetUnusedBlocks() + Environment.NewLine;
-            ret += "  Total Size    : " + TotalSizeBytes + " bytes " + Environment.NewLine;
-            ret += "  Free Space    : " + GetFreeSpace() + " bytes " + Environment.NewLine;
-            ret += "  Created       : " + CreatedUtc + Environment.NewLine;
-            Console.WriteLine("");
+            ret += "  Unused Blocks : " + UnusedBlocks + Environment.NewLine;
+            ret += "  Total Size    : " + TotalSize + " bytes " + Environment.NewLine;
+            ret += "  Free Space    : " + FreeSize + " bytes " + Environment.NewLine;
+            ret += "  Created       : " + _CreatedUtc + Environment.NewLine;
             return ret;
-        }
-
-        /// <summary>
-        /// Retrieve the total number of blocks in the container.
-        /// </summary>
-        /// <returns>Integer.</returns>
-        public int GetTotalBlocks()
-        {
-            return BlockCount;
-        }
-
-        /// <summary>
-        /// Retrieve the number of unused, unallocated blocks in the container.
-        /// </summary>
-        /// <returns>Integer.</returns>
-        public int GetUnusedBlocks()
-        {
-            int unused = 0;
-            for (int i = 0; i < BlockCount; i++)
-            {
-                if (UnusedBlocks[i]) unused++;
-            }
-            return unused;
-        } 
-
-        /// <summary>
-        /// Retrieve the total capacity of the container.
-        /// </summary>
-        /// <returns>Long.</returns>
-        public long GetTotalSpace()
-        {
-            return BlockCount * BlockSizeBytes;
-        }
-
-        /// <summary>
-        /// Retrieve the total unallocated, unused capacity of the container.
-        /// </summary>
-        /// <returns>Long.</returns>
-        public long GetFreeSpace()
-        {
-            int unused = GetUnusedBlocks();
-            return unused * BlockSizeBytes;
         }
 
         /// <summary>
@@ -198,7 +239,7 @@ namespace ContainerFS
         /// <returns>Byte data containing the block.</returns>
         public byte[] ReadRawBlockByIndex(int id)
         {
-            return ReadRawBlock((long)(BlockSizeBytes * id));
+            return ReadRawBlock((long)(_BlockSize * id));
         }
 
         /// <summary>
@@ -209,9 +250,9 @@ namespace ContainerFS
         public byte[] ReadRawBlock(long position)
         {
             if (position < 0) throw new ArgumentOutOfRangeException("Position must be greater than or equal to zero");
-            if (position % BlockSizeBytes != 0) throw new ArgumentOutOfRangeException("Position must be evenly divisble by " + BlockSizeBytes);
+            if (position % _BlockSize != 0) throw new ArgumentOutOfRangeException("Position must be evenly divisble by " + _BlockSize);
 
-            byte[] ret = CfsCommon.ReadFromPosition(Filestream, position, BlockSizeBytes);
+            byte[] ret = CfsCommon.ReadFromPosition(_FileStream, position, _BlockSize);
             return ret;
         }
 
@@ -222,7 +263,7 @@ namespace ContainerFS
         /// <returns>String.</returns>
         public string EnumerateBlockByIndex(int id)
         {
-            return EnumerateBlock((long)(BlockSizeBytes * id));
+            return EnumerateBlock((long)(_BlockSize * id));
         }
 
         /// <summary>
@@ -233,9 +274,9 @@ namespace ContainerFS
         public string EnumerateBlock(long position)
         {
             if (position < 0) throw new ArgumentOutOfRangeException("Position must be greater than or equal to zero");
-            if (position % BlockSizeBytes != 0) throw new ArgumentOutOfRangeException("Position must be evenly divisble by " + BlockSizeBytes);
+            if (position % _BlockSize != 0) throw new ArgumentOutOfRangeException("Position must be evenly divisble by " + _BlockSize);
 
-            byte[] data = CfsCommon.ReadFromPosition(Filestream, position, BlockSizeBytes);
+            byte[] data = CfsCommon.ReadFromPosition(_FileStream, position, _BlockSize);
             if (data == null || data.Length < 4)
             {
                 LogDebug("EnumerateBlock data returned is null or too small");
@@ -249,21 +290,21 @@ namespace ContainerFS
             {
                 // header
                 LogDebug("EnumerateBlock position " + position + " contains container metadata");
-                Container tempContainer = Container.FromBytes(CfsCommon.ReadFromPosition(Filestream, position, BlockSizeBytes));
+                Container tempContainer = Container.FromBytes(CfsCommon.ReadFromPosition(_FileStream, position, _BlockSize));
                 return tempContainer.ToString();
             }
             else if (CfsCommon.ByteArraysIdentical(signature, MetadataBlock.SignatureBytes))
             {
                 // metadata
                 LogDebug("EnumerateBlock position " + position + " contains metadata block");
-                MetadataBlock tempMetadata = MetadataBlock.FromPosition(Filestream, BlockSizeBytes, position, Logging);
+                MetadataBlock tempMetadata = MetadataBlock.FromPosition(_FileStream, _BlockSize, position, _Logging);
                 return tempMetadata.ToString();
             }
             else if (CfsCommon.ByteArraysIdentical(signature, DataBlock.SignatureBytes))
             {
                 // data
                 LogDebug("EnumerateBlock position " + position + " contains data block");
-                DataBlock tempData = DataBlock.FromPosition(Filestream, BlockSizeBytes, position, Logging);
+                DataBlock tempData = DataBlock.FromPosition(_FileStream, _BlockSize, position, _Logging);
                 return tempData.ToString();
             }
 
@@ -304,7 +345,7 @@ namespace ContainerFS
             }
 
             // read file metadata
-            MetadataBlock fileMetadata = MetadataBlock.FromPosition(Filestream, BlockSizeBytes, filePosition, Logging);
+            MetadataBlock fileMetadata = MetadataBlock.FromPosition(_FileStream, _BlockSize, filePosition, _Logging);
             if (fileMetadata == null)
             {
                 LogDebug("ReadFile unable to retrieve file metadata for " + name);
@@ -359,7 +400,7 @@ namespace ContainerFS
             }
 
             // read file metadata
-            MetadataBlock fileMetadata = MetadataBlock.FromPosition(Filestream, BlockSizeBytes, filePosition, Logging);
+            MetadataBlock fileMetadata = MetadataBlock.FromPosition(_FileStream, _BlockSize, filePosition, _Logging);
             if (fileMetadata == null)
             {
                 LogDebug("ReadFile unable to retrieve file metadata for " + name);
@@ -428,9 +469,8 @@ namespace ContainerFS
             }
 
             // check if free space is available
-            int blocksRequired = DataBlocksRequired(data.Length - (BlockSizeBytes - MetadataBlock.BytesReservedPerBlock)); 
-            int unusedBlocks = GetUnusedBlocks();
-            if (unusedBlocks < blocksRequired)
+            int blocksRequired = DataBlocksRequired(data.Length - (BlockSize - MetadataBlock.BytesReservedPerBlock)); 
+            if (UnusedBlocks < blocksRequired)
             {
                 LogDebug("WriteFile insufficient capacity to write " + data.Length + " bytes for file " + name);
                 throw new IOException("Disk is full");
@@ -453,16 +493,16 @@ namespace ContainerFS
             int dataRemaining = data.Length;
 
             // build buffer for data contained within metadata block
-            byte[] buffer = new byte[(BlockSizeBytes - MetadataBlock.BytesReservedPerBlock)];
+            byte[] buffer = new byte[(_BlockSize - MetadataBlock.BytesReservedPerBlock)];
             buffer = CfsCommon.InitByteArray(buffer.Length, 0x00);
 
             if (dataRemaining <= buffer.Length) Buffer.BlockCopy(data, 0, buffer, 0, dataRemaining);
-            else Buffer.BlockCopy(data, 0, buffer, 0, (BlockSizeBytes - MetadataBlock.BytesReservedPerBlock));
+            else Buffer.BlockCopy(data, 0, buffer, 0, (_BlockSize - MetadataBlock.BytesReservedPerBlock));
 
             // write the metadata object and set local data length
-            MetadataBlock md = new MetadataBlock(Filestream, BlockSizeBytes, currPosition, childDataPosition, data.Length, 0, 1, name, buffer, Logging);
+            MetadataBlock md = new MetadataBlock(_FileStream, _BlockSize, currPosition, childDataPosition, data.Length, 0, 1, name, buffer, _Logging);
             if (dataRemaining <= buffer.Length) md.LocalDataLength = data.Length;
-            else md.LocalDataLength = BlockSizeBytes - MetadataBlock.BytesReservedPerBlock;
+            else md.LocalDataLength = _BlockSize - MetadataBlock.BytesReservedPerBlock;
             
             // update pointers for metadata data payload
             currDataPointer += buffer.Length;
@@ -477,20 +517,20 @@ namespace ContainerFS
                 // write to data blocks
                 for (int i = 1; i < allocatedPositions.Count; i++) 
                 {
-                    int blockSize = (BlockSizeBytes - DataBlock.BytesReservedPerBlock);
+                    int blockSize = (_BlockSize - DataBlock.BytesReservedPerBlock);
                     if (blockSize > dataRemaining) blockSize = (int)dataRemaining;
 
                     buffer = new byte[blockSize];
                     LogDebug("WriteFile copying " + blockSize + " bytes from data position " + currDataPointer);
                     Buffer.BlockCopy(data, currDataPointer, buffer, 0, blockSize);
 
-                    DataBlock d = new DataBlock(Filestream, BlockSizeBytes, buffer, Logging);
+                    DataBlock d = new DataBlock(_FileStream, _BlockSize, buffer, _Logging);
                     if (i < (allocatedPositions.Count - 1)) d.ChildBlock = allocatedPositions[i + 1];
                     else d.ChildBlock = -1;
                     d.DataLength = blockSize;
                     d.ParentBlock = allocatedPositions[i - 1]; // safe, starting at i = 1
 
-                    CfsCommon.WriteAtPosition(Filestream, allocatedPositions[i], d.ToBytes());
+                    CfsCommon.WriteAtPosition(_FileStream, allocatedPositions[i], d.ToBytes());
                     LogDebug("WriteFile write " + d.DataLength + " for " + name + " at position " + allocatedPositions[i]);
 
                     // shift pointers
@@ -509,7 +549,7 @@ namespace ContainerFS
 
             // write metadata
             LogDebug("WriteFile writing new file metadata to position " + allocatedPositions[0] + " for file " + md.Name);
-            CfsCommon.WriteAtPosition(Filestream, allocatedPositions[0], md.ToBytes());
+            CfsCommon.WriteAtPosition(_FileStream, allocatedPositions[0], md.ToBytes());
 
             // update directory with link
             AppendPositionToMetadata(currPosition, metadataPosition);
@@ -555,7 +595,7 @@ namespace ContainerFS
                 throw new IOException("Unable to retrieve file metadata position");
             }
 
-            MetadataBlock fileMetadata = MetadataBlock.FromPosition(Filestream, BlockSizeBytes, metadataPosition, Logging);
+            MetadataBlock fileMetadata = MetadataBlock.FromPosition(_FileStream, _BlockSize, metadataPosition, _Logging);
             if (fileMetadata == null)
             {
                 LogDebug("DeleteFile unable to retrieve file metadata for file " + name);
@@ -566,14 +606,14 @@ namespace ContainerFS
 
             // unlink records
             SetBlockUnused((int)(metadataPosition / 8));
-            CfsCommon.WriteAtPosition(Filestream, metadataPosition, CfsCommon.InitByteArray(BlockSizeBytes, 0x00));
+            CfsCommon.WriteAtPosition(_FileStream, metadataPosition, CfsCommon.InitByteArray(_BlockSize, 0x00));
 
             if (dataPositions != null && dataPositions.Count > 0)
             {
                 foreach (long curr in dataPositions)
                 {
                     SetBlockUnused((int)(curr / 8));
-                    CfsCommon.WriteAtPosition(Filestream, curr, CfsCommon.InitByteArray(BlockSizeBytes, 0x00));
+                    CfsCommon.WriteAtPosition(_FileStream, curr, CfsCommon.InitByteArray(_BlockSize, 0x00));
                 }
             }
 
@@ -734,8 +774,8 @@ namespace ContainerFS
             AppendPositionToMetadata(currPosition, newPositions[0]);
 
             // write new metadata entry
-            MetadataBlock newDirectory = new MetadataBlock(Filestream, BlockSizeBytes, currPosition, -1, 0, 1, 0, targetDirectory, null, Logging);
-            CfsCommon.WriteAtPosition(Filestream, newPositions[0], newDirectory.ToBytes());
+            MetadataBlock newDirectory = new MetadataBlock(_FileStream, _BlockSize, currPosition, -1, 0, 1, 0, targetDirectory, null, _Logging);
+            CfsCommon.WriteAtPosition(_FileStream, newPositions[0], newDirectory.ToBytes());
             LogDebug("WriteDirectory successfully wrote diretory " + path + ":" + newDirectory.ToString());
 
             // return
@@ -776,7 +816,7 @@ namespace ContainerFS
                 LogDebug("DeleteDirectory successfully read directory " + path);
             }
 
-            MetadataBlock tempMetadata = MetadataBlock.FromPosition(Filestream, BlockSizeBytes, currPosition, Logging);
+            MetadataBlock tempMetadata = MetadataBlock.FromPosition(_FileStream, _BlockSize, currPosition, _Logging);
             if (tempMetadata == null)
             {
                 LogDebug("DeleteDirectory unable to read child metadata at position " + currPosition);
@@ -907,7 +947,7 @@ namespace ContainerFS
             {
                 if (metadata.ChildDataBlock <= 0) break;
 
-                metadata = MetadataBlock.FromPosition(Filestream, BlockSizeBytes, metadata.ChildDataBlock, Logging);
+                metadata = MetadataBlock.FromPosition(_FileStream, _BlockSize, metadata.ChildDataBlock, _Logging);
                 if (metadata == null)
                 {
                     LogDebug("FindFileMetadata child md not found at " + metadata.ChildDataBlock);
@@ -939,7 +979,7 @@ namespace ContainerFS
             for (int i = 0; i < addresses.Length; i++)
             {
                 // each address is a metadata node for a child in this directory
-                MetadataBlock currMetadata = MetadataBlock.FromPosition(Filestream, BlockSizeBytes, addresses[i], Logging);
+                MetadataBlock currMetadata = MetadataBlock.FromPosition(_FileStream, _BlockSize, addresses[i], _Logging);
                 if (currMetadata == null)
                 {
                     LogDebug("FindFileMetadata unable to read md linked in metdata at position " + addresses[i]);
@@ -964,7 +1004,7 @@ namespace ContainerFS
 
         private int DataBlocksRequired(long data)
         {
-            int blocksRequired = (int)Math.Ceiling((double)data / (double)(BlockSizeBytes - DataBlock.BytesReservedPerBlock));
+            int blocksRequired = (int)Math.Ceiling((double)data / (double)(_BlockSize - DataBlock.BytesReservedPerBlock));
             LogDebug("DataBlocksRequired data length " + data + " requires " + blocksRequired + " data blocks");
             return blocksRequired;
         }
@@ -972,7 +1012,7 @@ namespace ContainerFS
         private List<long> AllocateBlocks(int count)
         {
             if (count < 1) throw new ArgumentOutOfRangeException(nameof(count));
-            if (GetUnusedBlocks() < count)
+            if (UnusedBlocks < count)
             {
                 LogDebug("AllocateBlocks not enough free blocks to reserve " + count + " blocks");
                 throw new IOException("Disk is full");
@@ -983,11 +1023,11 @@ namespace ContainerFS
             bool allocated = false;
 
             // find unused blocks
-            for (int i = 0; i < UnusedBlocks.Length; i++)
+            for (int i = 0; i < _UnusedBlocks.Length; i++)
             {
-                if (UnusedBlocks[i])
+                if (_UnusedBlocks[i])
                 {
-                    allocatedPositions.Add(i * BlockSizeBytes);  // relative address
+                    allocatedPositions.Add(i * _BlockSize);  // relative address
                     allocatedIndices.Add(i);                     // index, cannot modify while iterating
                     if (allocatedPositions.Count >= count)
                     {
@@ -1020,7 +1060,7 @@ namespace ContainerFS
             if (blocks == null || blocks.Count < 1) return;
             foreach (long curr in blocks)
             {
-                int position = (int)(curr / BlockSizeBytes);
+                int position = (int)(curr / _BlockSize);
                 SetBlockUnused(position);
             }
             return;
@@ -1028,7 +1068,7 @@ namespace ContainerFS
         
         private void DeallocateBlock(long block)
         {
-            int position = (int)(block / BlockSizeBytes);
+            int position = (int)(block / _BlockSize);
             SetBlockUnused(position);
             return;
         }
@@ -1040,7 +1080,7 @@ namespace ContainerFS
             long childPosition = directory.ChildDataBlock;
             while (childPosition > 0)
             {
-                DataBlock child = DataBlock.FromPosition(Filestream, BlockSizeBytes, childPosition, Logging);
+                DataBlock child = DataBlock.FromPosition(_FileStream, _BlockSize, childPosition, _Logging);
                 if (child == null)
                 {
                     LogDebug("DeallocateDirectory unable to read linked child data block at " + childPosition);
@@ -1048,14 +1088,14 @@ namespace ContainerFS
                 }
 
                 SetBlockUnused((int)(childPosition / 8));
-                CfsCommon.WriteAtPosition(Filestream, childPosition, CfsCommon.InitByteArray(BlockSizeBytes, 0x00));
+                CfsCommon.WriteAtPosition(_FileStream, childPosition, CfsCommon.InitByteArray(_BlockSize, 0x00));
                 childPosition = child.ChildBlock;
             }
         }
 
         private void AppendPositionToMetadata(long metadataPosition, long positionToAdd)
         {
-            MetadataBlock curr = MetadataBlock.FromPosition(Filestream, BlockSizeBytes, metadataPosition, Logging);
+            MetadataBlock curr = MetadataBlock.FromPosition(_FileStream, _BlockSize, metadataPosition, _Logging);
             if (curr == null)
             {
                 LogDebug("AppendPositionToMetadata unable to retrieve metadata from position " + metadataPosition);
@@ -1080,14 +1120,14 @@ namespace ContainerFS
             // determine number of blocks required
             long sizeRequired = positionsList.Count * 8;
             int blocksRequired = 0;
-            if (sizeRequired < (BlockSizeBytes - MetadataBlock.BytesReservedPerBlock))
+            if (sizeRequired < (_BlockSize - MetadataBlock.BytesReservedPerBlock))
             {
                 LogDebug("AppendPositionToMetadata updated positions list fits into metadata block");
             }
             else
             {
-                sizeRequired = sizeRequired - BlockSizeBytes;
-                blocksRequired = (int)Math.Ceiling((double)sizeRequired / (double)(BlockSizeBytes - DataBlock.BytesReservedPerBlock));
+                sizeRequired = sizeRequired - _BlockSize;
+                blocksRequired = (int)Math.Ceiling((double)sizeRequired / (double)(_BlockSize - DataBlock.BytesReservedPerBlock));
                 LogDebug("AppendPositionToMetadata updated positions list requires metadata block plus " + blocksRequired + " blocks");
             }
             
@@ -1095,13 +1135,13 @@ namespace ContainerFS
             if (blocksRequired == 0)
             {
                 // fits into metadata, just rewrite and return
-                CfsCommon.WriteAtPosition(Filestream, metadataPosition, CfsCommon.InitByteArray(BlockSizeBytes - MetadataBlock.BytesReservedPerBlock, 0x00));
+                CfsCommon.WriteAtPosition(_FileStream, metadataPosition, CfsCommon.InitByteArray(_BlockSize - MetadataBlock.BytesReservedPerBlock, 0x00));
                 curr.Data = ArrayLongToBytes(positionsList.ToArray());
 
                 if (curr.Data != null) curr.LocalDataLength = curr.Data.Length;
                 else curr.LocalDataLength = 0;
 
-                CfsCommon.WriteAtPosition(Filestream, metadataPosition, curr.ToBytes());
+                CfsCommon.WriteAtPosition(_FileStream, metadataPosition, curr.ToBytes());
                 LogDebug("AppendPositionToMetadata successfully rewrote metadata block at position " + metadataPosition);
                 return;
             }
@@ -1111,7 +1151,7 @@ namespace ContainerFS
             long[] allocatedPositions = allocatedPositionsList.ToArray();
 
             // rewrite metadata
-            int metadataBytesAvailable = BlockSizeBytes - MetadataBlock.BytesReservedPerBlock;
+            int metadataBytesAvailable = _BlockSize - MetadataBlock.BytesReservedPerBlock;
             int currPositionsPointer = 0;
             int currMetadataBlockPointer = 0;
             curr.Data = new byte[metadataBytesAvailable];
@@ -1123,17 +1163,17 @@ namespace ContainerFS
                 currMetadataBlockPointer += 8;
             }
             curr.LocalDataLength = curr.Data.Length;
-            CfsCommon.WriteAtPosition(Filestream, metadataPosition, curr.ToBytes());
+            CfsCommon.WriteAtPosition(_FileStream, metadataPosition, curr.ToBytes());
             LogDebug("AppendPositionToMetadata successfully rewrote metadata block at position " + metadataPosition + ", continuing to data blocks");
 
             // write datablocks
             long currParent = metadataPosition;
             for (int i = 0; i < allocatedPositions.Length; i++)
             {
-                int dataBytesAvailable = BlockSizeBytes - DataBlock.BytesReservedPerBlock;
+                int dataBytesAvailable = _BlockSize - DataBlock.BytesReservedPerBlock;
                 int currDataBlockPointer = 0;
 
-                DataBlock d = new DataBlock(Filestream, BlockSizeBytes, CfsCommon.InitByteArray(dataBytesAvailable, 0x00), Logging);
+                DataBlock d = new DataBlock(_FileStream, _BlockSize, CfsCommon.InitByteArray(dataBytesAvailable, 0x00), _Logging);
                 if (i < (allocatedPositions.Length - 1)) d.ChildBlock = allocatedPositions[i + 1];
                 else d.ChildBlock = -1;
                 d.ParentBlock = currParent;
@@ -1147,7 +1187,7 @@ namespace ContainerFS
                 }
                 
                 d.DataLength = d.Data.Length;
-                CfsCommon.WriteAtPosition(Filestream, allocatedPositions[i], d.ToBytes());
+                CfsCommon.WriteAtPosition(_FileStream, allocatedPositions[i], d.ToBytes());
                 LogDebug("AppendPositionToMetadata successfully wrote data block " + i);
             }
 
@@ -1159,7 +1199,7 @@ namespace ContainerFS
 
         private void RemovePositionFromMetadata(long metadataPosition, long positionToRemove)
         {
-            MetadataBlock curr = MetadataBlock.FromPosition(Filestream, BlockSizeBytes, metadataPosition, Logging);
+            MetadataBlock curr = MetadataBlock.FromPosition(_FileStream, _BlockSize, metadataPosition, _Logging);
             if (curr == null)
             {
                 LogDebug("RemovePositionFromMetadata unable to retrieve metadata from position " + metadataPosition);
@@ -1179,14 +1219,14 @@ namespace ContainerFS
             // determine number of blocks required
             long sizeRequired = positionsList.Count * 8;
             int blocksRequired = 0;
-            if (sizeRequired < (BlockSizeBytes - MetadataBlock.BytesReservedPerBlock))
+            if (sizeRequired < (_BlockSize - MetadataBlock.BytesReservedPerBlock))
             {
                 LogDebug("RemovePositionFromMetadata updated positions list fits into metadata block");
             }
             else
             {
-                sizeRequired = sizeRequired - BlockSizeBytes;
-                blocksRequired = (int)Math.Ceiling((double)sizeRequired / (double)(BlockSizeBytes - DataBlock.BytesReservedPerBlock));
+                sizeRequired = sizeRequired - _BlockSize;
+                blocksRequired = (int)Math.Ceiling((double)sizeRequired / (double)(_BlockSize - DataBlock.BytesReservedPerBlock));
                 LogDebug("RemovePositionFromMetadata updated positions list requires metadata block plus " + blocksRequired + " blocks");
             }
 
@@ -1194,13 +1234,13 @@ namespace ContainerFS
             if (blocksRequired == 0)
             {
                 // fits into metadata, just rewrite and return
-                CfsCommon.WriteAtPosition(Filestream, metadataPosition, CfsCommon.InitByteArray(BlockSizeBytes - MetadataBlock.BytesReservedPerBlock, 0x00));
+                CfsCommon.WriteAtPosition(_FileStream, metadataPosition, CfsCommon.InitByteArray(_BlockSize - MetadataBlock.BytesReservedPerBlock, 0x00));
                 curr.Data = ArrayLongToBytes(positionsList.ToArray());
 
                 if (curr.Data != null) curr.LocalDataLength = curr.Data.Length;
                 else curr.LocalDataLength = 0;
 
-                CfsCommon.WriteAtPosition(Filestream, metadataPosition, curr.ToBytes());
+                CfsCommon.WriteAtPosition(_FileStream, metadataPosition, curr.ToBytes());
                 LogDebug("RemovePositionFromMetadata successfully rewrote metadata block at position " + metadataPosition + " (removed " + positionToRemove + ")");
                 return;
             }
@@ -1210,7 +1250,7 @@ namespace ContainerFS
             long[] allocatedPositions = allocatedPositionsList.ToArray();
 
             // rewrite metadata
-            int metadataBytesAvailable = BlockSizeBytes - MetadataBlock.BytesReservedPerBlock;
+            int metadataBytesAvailable = _BlockSize - MetadataBlock.BytesReservedPerBlock;
             int currPositionsPointer = 0;
             int currMetadataBlockPointer = 0;
             curr.Data = new byte[metadataBytesAvailable];
@@ -1222,17 +1262,17 @@ namespace ContainerFS
                 currMetadataBlockPointer += 8;
             }
             curr.LocalDataLength = curr.Data.Length;
-            CfsCommon.WriteAtPosition(Filestream, metadataPosition, curr.ToBytes());
+            CfsCommon.WriteAtPosition(_FileStream, metadataPosition, curr.ToBytes());
             LogDebug("RemovePositionFromMetadata successfully rewrote metadata block at position " + metadataPosition + ", continuing to data blocks");
 
             // write datablocks
             long currParent = metadataPosition;
             for (int i = 0; i < allocatedPositions.Length; i++)
             {
-                int dataBytesAvailable = BlockSizeBytes - DataBlock.BytesReservedPerBlock;
+                int dataBytesAvailable = _BlockSize - DataBlock.BytesReservedPerBlock;
                 int currDataBlockPointer = 0;
 
-                DataBlock d = new DataBlock(Filestream, BlockSizeBytes, CfsCommon.InitByteArray(dataBytesAvailable, 0x00), Logging);
+                DataBlock d = new DataBlock(_FileStream, _BlockSize, CfsCommon.InitByteArray(dataBytesAvailable, 0x00), _Logging);
                 if (i < (allocatedPositions.Length - 1)) d.ChildBlock = allocatedPositions[i + 1];
                 else d.ChildBlock = -1;
                 d.ParentBlock = currParent;
@@ -1246,7 +1286,7 @@ namespace ContainerFS
                 }
 
                 d.DataLength = d.Data.Length;
-                CfsCommon.WriteAtPosition(Filestream, allocatedPositions[i], d.ToBytes());
+                CfsCommon.WriteAtPosition(_FileStream, allocatedPositions[i], d.ToBytes());
                 LogDebug("RemovePositionFromMetadata successfully wrote data block " + i);
             }
 
@@ -1266,7 +1306,7 @@ namespace ContainerFS
                 #region Root
 
                 ret = ReadRootMetadata();
-                position = BlockSizeBytes;  // root metadata
+                position = _BlockSize;  // root metadata
                 LogDebug("FindDirectoryMetadata returning root dir md");
                 return ret;
 
@@ -1281,7 +1321,7 @@ namespace ContainerFS
                 LogDebug("FindDirectoryMetadata processing nested directory");
 
                 // curr will be overwritten while iterating through the path
-                position = BlockSizeBytes;  // root metadata
+                position = _BlockSize;  // root metadata
                 MetadataBlock curr = ReadRootMetadata();
                 LogDebug("FindDirectoryMetadata processing directory: " + curr.ToString());
 
@@ -1307,7 +1347,7 @@ namespace ContainerFS
                         LogDebug("FindDirectoryMetadata reading metadata block " + j + "/" + blocks.Length + " for " + curr.Name + " in " + dir);
 
                         position = blocks[j];
-                        MetadataBlock tempMd = MetadataBlock.FromPosition(Filestream, BlockSizeBytes, blocks[j], Logging);
+                        MetadataBlock tempMd = MetadataBlock.FromPosition(_FileStream, _BlockSize, blocks[j], _Logging);
                         if (tempMd == null)
                         {
                             // unable to read block
@@ -1346,7 +1386,7 @@ namespace ContainerFS
         private MetadataBlock ReadRootMetadata()
         {
             LogDebug("ReadRootMetadata reading root metadata");
-            return MetadataBlock.FromPosition(Filestream, BlockSizeBytes, BlockSizeBytes, Logging);
+            return MetadataBlock.FromPosition(_FileStream, _BlockSize, _BlockSize, _Logging);
         }
         
         private string[] ParsePath(string path)
@@ -1406,7 +1446,7 @@ namespace ContainerFS
             {
                 if (metadata.ChildDataBlock <= 0) break;
 
-                metadata = MetadataBlock.FromPosition(Filestream, BlockSizeBytes, metadata.ChildDataBlock, Logging);
+                metadata = MetadataBlock.FromPosition(_FileStream, _BlockSize, metadata.ChildDataBlock, _Logging);
                 if (metadata == null)
                 {
                     LogDebug("EnumerateDirectory child md not found at " + metadata.ChildDataBlock);
@@ -1438,7 +1478,7 @@ namespace ContainerFS
             for (int i = 0; i < addresses.Length; i++)
             {
                 // each address is a metadata node for a child in this directory
-                MetadataBlock currMetadata = MetadataBlock.FromPosition(Filestream, BlockSizeBytes, addresses[i], Logging);
+                MetadataBlock currMetadata = MetadataBlock.FromPosition(_FileStream, _BlockSize, addresses[i], _Logging);
                 if (currMetadata == null)
                 {
                     LogDebug("EnumerateDirectory unable to read md linked in metdata at position " + addresses[i]);
@@ -1467,7 +1507,7 @@ namespace ContainerFS
             long currPosition = md.ChildDataBlock;
             while (true)
             {
-                DataBlock curr = DataBlock.FromPosition(Filestream, BlockSizeBytes, currPosition, Logging);
+                DataBlock curr = DataBlock.FromPosition(_FileStream, _BlockSize, currPosition, _Logging);
                 if (curr == null)
                 {
                     LogDebug("GetFileDataBlockPositions unable to retrieve child data block at " + currPosition);
@@ -1517,25 +1557,25 @@ namespace ContainerFS
 
         private byte[] ToBytes()
         {
-            byte[] ret = CfsCommon.InitByteArray(BlockSizeBytes, 0x00);
+            byte[] ret = CfsCommon.InitByteArray(_BlockSize, 0x00);
             Buffer.BlockCopy(Container.SignatureBytes, 0, ret, 0, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(Version), 0, ret, 8, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(_Version), 0, ret, 8, 4);
 
-            if (Name.Length > 256) Name = Name.Substring(0, 256);
-            byte[] nameByteArray = Encoding.UTF8.GetBytes(Name);
+            if (_Name.Length > 256) _Name = _Name.Substring(0, 256);
+            byte[] nameByteArray = Encoding.UTF8.GetBytes(_Name);
             byte[] nameBytesFixed = new byte[256];
             Buffer.BlockCopy(nameByteArray, 0, nameBytesFixed, 0, nameByteArray.Length);
             Buffer.BlockCopy(nameBytesFixed, 0, ret, 16, 256);
 
-            Buffer.BlockCopy(BitConverter.GetBytes(BlockSizeBytes), 0, ret, 288, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(BlockCount), 0, ret, 296, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(_BlockSize), 0, ret, 288, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(_BlockCount), 0, ret, 296, 4);
 
-            byte[] tsByteArray = Encoding.UTF8.GetBytes(CreatedUtc);
+            byte[] tsByteArray = Encoding.UTF8.GetBytes(_CreatedUtc);
             byte[] tsBytesFixed = CfsCommon.InitByteArray(32, 0x00);
             Buffer.BlockCopy(tsByteArray, 0, tsBytesFixed, 0, tsByteArray.Length);
             Buffer.BlockCopy(tsBytesFixed, 0, ret, 304, 32);
 
-            byte[] unusedBlocks = CfsCommon.BitArrayToByteArray(UnusedBlocks);
+            byte[] unusedBlocks = CfsCommon.BitArrayToByteArray(_UnusedBlocks);
             Buffer.BlockCopy(unusedBlocks, 0, ret, 1024, unusedBlocks.Length);
             
             return ret;
@@ -1543,42 +1583,42 @@ namespace ContainerFS
         
         private void SetFileSize(long size)
         {
-            Filestream.SetLength(size);
+            _FileStream.SetLength(size);
         }
         
         private void SetBlockUsed(int blockNum)
         {
-            if (blockNum < 0 || blockNum > (BlockCount - 1)) throw new ArgumentOutOfRangeException(nameof(blockNum));
-            UnusedBlocks[blockNum] = false;
-            CfsCommon.WriteAtPosition(Filestream, 1024, CfsCommon.BitArrayToByteArray(UnusedBlocks));
+            if (blockNum < 0 || blockNum > (_BlockCount - 1)) throw new ArgumentOutOfRangeException(nameof(blockNum));
+            _UnusedBlocks[blockNum] = false;
+            CfsCommon.WriteAtPosition(_FileStream, 1024, CfsCommon.BitArrayToByteArray(_UnusedBlocks));
         }
 
         private void SetBlockUnused(int blockNum)
         {
-            if (blockNum < 0 || blockNum > (BlockCount - 1)) throw new ArgumentOutOfRangeException(nameof(blockNum));
-            UnusedBlocks[blockNum] = true;
-            CfsCommon.WriteAtPosition(Filestream, 1024, CfsCommon.BitArrayToByteArray(UnusedBlocks));
+            if (blockNum < 0 || blockNum > (_BlockCount - 1)) throw new ArgumentOutOfRangeException(nameof(blockNum));
+            _UnusedBlocks[blockNum] = true;
+            CfsCommon.WriteAtPosition(_FileStream, 1024, CfsCommon.BitArrayToByteArray(_UnusedBlocks));
         }
 
         private void LoadUnusedBlocksFromDisk()
         {
-            byte[] data = CfsCommon.ReadFromPosition(Filestream, 1024, (BlockCount / 8));
-            UnusedBlocks = CfsCommon.ByteArrayToBitArray(data);
+            byte[] data = CfsCommon.ReadFromPosition(_FileStream, 1024, (_BlockCount / 8));
+            _UnusedBlocks = CfsCommon.ByteArrayToBitArray(data);
         }
         
         private void LogDebug(string msg)
         {
-            if (Logging != null) Logging.Log(LoggingModule.Severity.Debug, msg);
+            if (_Logging != null) _Logging.Debug(_Header + msg);
         }
 
         private void LogWarn(string msg)
         {
-            if (Logging != null) Logging.Log(LoggingModule.Severity.Warn, msg);
+            if (_Logging != null) _Logging.Warn(_Header + msg);
         }
 
         private void LogAlert(string msg)
         {
-            if (Logging != null) Logging.Log(LoggingModule.Severity.Alert, msg);
+            if (_Logging != null) _Logging.Alert(_Header + msg);
         }
 
         #endregion
@@ -1591,7 +1631,7 @@ namespace ContainerFS
         /// <param name="filename">The file to load.</param>
         /// <param name="loggingEnable">Enable or disable debug logging.</param>
         /// <returns>A ready-to-use container object.</returns>
-        public static Container FromFile(string filename, bool loggingEnable)
+        public static Container FromFile(string filename, bool loggingEnable = false)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
             FileStream filestream = new FileStream(filename, FileMode.Open);
@@ -1609,11 +1649,19 @@ namespace ContainerFS
             if (data == null || data.Length < blockSizeBytes) throw new IOException("Unable to read first " + blockSizeBytes + " bytes from file");
 
             Container ret = Container.FromBytes(data);
-            ret.Filestream = filestream;
-            ret.TotalSizeBytes = ret.BlockCount * ret.BlockSizeBytes;
+            ret._FileStream = filestream;
+            ret._TotalSize = ret._BlockCount * ret._BlockSize;
 
-            if (loggingEnable) ret.Logging = new LoggingModule("127.0.0.1", 514, true, LoggingModule.Severity.Debug, false, true, true, true, true, true);
-            else ret.Logging = null;
+            if (loggingEnable)
+            {
+                ret._Logging = new LoggingModule("127.0.0.1", 514, true);
+                ret._Logging.Settings.EnableConsole = true;
+                ret._Logging.Settings.EnableColors = true;
+            }
+            else
+            {
+                ret._Logging = null;
+            }
 
             return ret;
         }
@@ -1630,33 +1678,33 @@ namespace ContainerFS
             Container ret = new Container();
             byte[] temp;
 
-            ret.Signature = new byte[4];
-            Buffer.BlockCopy(ba, 0, ret.Signature, 0, 4);
+            ret._Signature = new byte[4];
+            Buffer.BlockCopy(ba, 0, ret._Signature, 0, 4);
 
             temp = new byte[4];
             Buffer.BlockCopy(ba, 8, temp, 0, 4);
-            ret.Version = BitConverter.ToInt32(temp, 0);
+            ret._Version = BitConverter.ToInt32(temp, 0);
 
             temp = new byte[256];
             Buffer.BlockCopy(ba, 16, temp, 0, 256);
-            ret.Name = Encoding.UTF8.GetString(CfsCommon.TrimNullBytes(temp)).Trim();
+            ret._Name = Encoding.UTF8.GetString(CfsCommon.TrimNullBytes(temp)).Trim();
 
             temp = new byte[4];
             Buffer.BlockCopy(ba, 288, temp, 0, 4);
-            ret.BlockSizeBytes = BitConverter.ToInt32(temp, 0);
+            ret._BlockSize = BitConverter.ToInt32(temp, 0);
 
             temp = new byte[4];
             Buffer.BlockCopy(ba, 296, temp, 0, 4);
-            ret.BlockCount = BitConverter.ToInt32(temp, 0);
+            ret._BlockCount = BitConverter.ToInt32(temp, 0);
 
             temp = new byte[32];
             Buffer.BlockCopy(ba, 304, temp, 0, 32);
-            ret.CreatedUtc = Encoding.UTF8.GetString(CfsCommon.TrimNullBytes(temp)).Trim();
+            ret._CreatedUtc = Encoding.UTF8.GetString(CfsCommon.TrimNullBytes(temp)).Trim();
 
-            int unusedBlocksSize = ret.BlockCount / 8;
+            int unusedBlocksSize = ret._BlockCount / 8;
             temp = new byte[unusedBlocksSize];
             Buffer.BlockCopy(ba, 1024, temp, 0, unusedBlocksSize);
-            ret.UnusedBlocks = CfsCommon.ByteArrayToBitArray(temp);
+            ret._UnusedBlocks = CfsCommon.ByteArrayToBitArray(temp);
 
             return ret;
         }
