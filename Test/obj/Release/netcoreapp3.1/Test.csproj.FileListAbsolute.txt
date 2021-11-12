@@ -10,7 +10,6 @@ C:\Code\Misc\ContainerFS\Test\bin\Release\netcoreapp3.1\Test.pdb
 C:\Code\Misc\ContainerFS\Test\bin\Release\netcoreapp3.1\LoggingModule.dll
 C:\Code\Misc\ContainerFS\Test\bin\Release\netcoreapp3.1\ContainerFS.dll
 C:\Code\Misc\ContainerFS\Test\bin\Release\netcoreapp3.1\ContainerFS.pdb
-C:\Code\Misc\ContainerFS\Test\obj\Release\netcoreapp3.1\Test.csprojAssemblyReference.cache
 C:\Code\Misc\ContainerFS\Test\obj\Release\netcoreapp3.1\Test.AssemblyInfoInputs.cache
 C:\Code\Misc\ContainerFS\Test\obj\Release\netcoreapp3.1\Test.AssemblyInfo.cs
 C:\Code\Misc\ContainerFS\Test\obj\Release\netcoreapp3.1\Test.csproj.CoreCompileInputs.cache
@@ -18,3 +17,5 @@ C:\Code\Misc\ContainerFS\Test\obj\Release\netcoreapp3.1\Test.csproj.CopyComplete
 C:\Code\Misc\ContainerFS\Test\obj\Release\netcoreapp3.1\Test.dll
 C:\Code\Misc\ContainerFS\Test\obj\Release\netcoreapp3.1\Test.pdb
 C:\Code\Misc\ContainerFS\Test\obj\Release\netcoreapp3.1\Test.genruntimeconfig.cache
+C:\Code\Misc\ContainerFS\Test\obj\Release\netcoreapp3.1\Test.csproj.AssemblyReference.cache
+C:\Code\Misc\ContainerFS\Test\obj\Release\netcoreapp3.1\Test.GeneratedMSBuildEditorConfig.editorconfig

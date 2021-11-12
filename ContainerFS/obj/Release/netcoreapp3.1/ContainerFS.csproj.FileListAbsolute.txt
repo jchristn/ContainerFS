@@ -4,9 +4,10 @@ C:\Code\Misc\ContainerFS\ContainerFS\bin\Release\netcoreapp3.1\ContainerFS.xml
 C:\Code\Misc\ContainerFS\ContainerFS\bin\Release\netcoreapp3.1\ContainerFS.deps.json
 C:\Code\Misc\ContainerFS\ContainerFS\bin\Release\netcoreapp3.1\ContainerFS.dll
 C:\Code\Misc\ContainerFS\ContainerFS\bin\Release\netcoreapp3.1\ContainerFS.pdb
-C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\netcoreapp3.1\ContainerFS.csprojAssemblyReference.cache
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\netcoreapp3.1\ContainerFS.AssemblyInfoInputs.cache
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\netcoreapp3.1\ContainerFS.AssemblyInfo.cs
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\netcoreapp3.1\ContainerFS.csproj.CoreCompileInputs.cache
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\netcoreapp3.1\ContainerFS.dll
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\netcoreapp3.1\ContainerFS.pdb
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\netcoreapp3.1\ContainerFS.csproj.AssemblyReference.cache
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\netcoreapp3.1\ContainerFS.GeneratedMSBuildEditorConfig.editorconfig

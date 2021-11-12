@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net452;net461;netcoreapp3.1;net5.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;net452;net461;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.2.0</Version>
+    <Version>1.2.0.1</Version>
     <Authors>Joel Christner</Authors>
     <Description>Self-contained single-user file system written in C#.</Description>
     <Copyright>(c)2021 Joel Christner</Copyright>
@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SyslogLogging" Version="2.0.1.3" />
+    <PackageReference Include="SyslogLogging" Version="2.0.1.6" />
   </ItemGroup>
 
   <ItemGroup>

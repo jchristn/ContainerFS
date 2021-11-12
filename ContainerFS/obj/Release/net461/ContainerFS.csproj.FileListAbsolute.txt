@@ -4,10 +4,11 @@ C:\Code\Misc\ContainerFS\ContainerFS\bin\Release\net461\ContainerFS.xml
 C:\Code\Misc\ContainerFS\ContainerFS\bin\Release\net461\ContainerFS.dll
 C:\Code\Misc\ContainerFS\ContainerFS\bin\Release\net461\ContainerFS.pdb
 C:\Code\Misc\ContainerFS\ContainerFS\bin\Release\net461\LoggingModule.dll
-C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\net461\ContainerFS.csprojAssemblyReference.cache
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\net461\ContainerFS.AssemblyInfoInputs.cache
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\net461\ContainerFS.AssemblyInfo.cs
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\net461\ContainerFS.csproj.CoreCompileInputs.cache
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\net461\ContainerFS.csproj.CopyComplete
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\net461\ContainerFS.dll
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\net461\ContainerFS.pdb
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\net461\ContainerFS.csproj.AssemblyReference.cache
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\net461\ContainerFS.GeneratedMSBuildEditorConfig.editorconfig

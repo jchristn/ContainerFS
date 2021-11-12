@@ -4,10 +4,11 @@ C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\net452\ContainerFS.xml
 C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\net452\ContainerFS.dll
 C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\net452\ContainerFS.pdb
 C:\Code\Misc\ContainerFS\ContainerFS\bin\Debug\net452\LoggingModule.dll
-C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net452\ContainerFS.csprojAssemblyReference.cache
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net452\ContainerFS.AssemblyInfoInputs.cache
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net452\ContainerFS.AssemblyInfo.cs
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net452\ContainerFS.csproj.CoreCompileInputs.cache
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net452\ContainerFS.csproj.CopyComplete
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net452\ContainerFS.dll
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net452\ContainerFS.pdb
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net452\ContainerFS.csproj.AssemblyReference.cache
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Debug\net452\ContainerFS.GeneratedMSBuildEditorConfig.editorconfig

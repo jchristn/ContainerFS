@@ -10,3 +10,5 @@ C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.csproj.CoreC
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.csproj.CopyComplete
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.dll
 C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.pdb
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.csproj.AssemblyReference.cache
+C:\Code\Misc\ContainerFS\ContainerFS\obj\Release\net452\ContainerFS.GeneratedMSBuildEditorConfig.editorconfig

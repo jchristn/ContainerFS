@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.1": {
-      "SyslogLogging/2.0.1.3": {
+      "SyslogLogging/2.0.1.6": {
         "type": "package",
         "compile": {
           "lib/netcoreapp3.1/LoggingModule.dll": {}
@@ -11,11 +11,11 @@
           "lib/netcoreapp3.1/LoggingModule.dll": {}
         }
       },
-      "ContainerFS/1.2.0": {
+      "ContainerFS/1.2.0.1": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
-          "SyslogLogging": "2.0.1.3"
+          "SyslogLogging": "2.0.1.6"
         },
         "compile": {
           "bin/placeholder/ContainerFS.dll": {}
@@ -26,7 +26,7 @@
       }
     },
     ".NETCoreApp,Version=v3.1/win7-x86": {
-      "SyslogLogging/2.0.1.3": {
+      "SyslogLogging/2.0.1.6": {
         "type": "package",
         "compile": {
           "lib/netcoreapp3.1/LoggingModule.dll": {}
@@ -35,11 +35,11 @@
           "lib/netcoreapp3.1/LoggingModule.dll": {}
         }
       },
-      "ContainerFS/1.2.0": {
+      "ContainerFS/1.2.0.1": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
-          "SyslogLogging": "2.0.1.3"
+          "SyslogLogging": "2.0.1.6"
         },
         "compile": {
           "bin/placeholder/ContainerFS.dll": {}
@@ -50,7 +50,7 @@
       }
     },
     ".NETFramework,Version=v4.5.2": {
-      "SyslogLogging/2.0.1.3": {
+      "SyslogLogging/2.0.1.6": {
         "type": "package",
         "compile": {
           "lib/net451/LoggingModule.dll": {}
@@ -59,11 +59,11 @@
           "lib/net451/LoggingModule.dll": {}
         }
       },
-      "ContainerFS/1.2.0": {
+      "ContainerFS/1.2.0.1": {
         "type": "project",
         "framework": ".NETFramework,Version=v4.5.2",
         "dependencies": {
-          "SyslogLogging": "2.0.1.3"
+          "SyslogLogging": "2.0.1.6"
         },
         "compile": {
           "bin/placeholder/ContainerFS.dll": {}
@@ -74,7 +74,7 @@
       }
     },
     ".NETFramework,Version=v4.5.2/win7-x86": {
-      "SyslogLogging/2.0.1.3": {
+      "SyslogLogging/2.0.1.6": {
         "type": "package",
         "compile": {
           "lib/net451/LoggingModule.dll": {}
@@ -83,11 +83,59 @@
           "lib/net451/LoggingModule.dll": {}
         }
       },
-      "ContainerFS/1.2.0": {
+      "ContainerFS/1.2.0.1": {
         "type": "project",
         "framework": ".NETFramework,Version=v4.5.2",
         "dependencies": {
-          "SyslogLogging": "2.0.1.3"
+          "SyslogLogging": "2.0.1.6"
+        },
+        "compile": {
+          "bin/placeholder/ContainerFS.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ContainerFS.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.6.1": {
+      "SyslogLogging/2.0.1.6": {
+        "type": "package",
+        "compile": {
+          "lib/net451/LoggingModule.dll": {}
+        },
+        "runtime": {
+          "lib/net451/LoggingModule.dll": {}
+        }
+      },
+      "ContainerFS/1.2.0.1": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.6.1",
+        "dependencies": {
+          "SyslogLogging": "2.0.1.6"
+        },
+        "compile": {
+          "bin/placeholder/ContainerFS.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ContainerFS.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.6.1/win7-x86": {
+      "SyslogLogging/2.0.1.6": {
+        "type": "package",
+        "compile": {
+          "lib/net451/LoggingModule.dll": {}
+        },
+        "runtime": {
+          "lib/net451/LoggingModule.dll": {}
+        }
+      },
+      "ContainerFS/1.2.0.1": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.6.1",
+        "dependencies": {
+          "SyslogLogging": "2.0.1.6"
         },
         "compile": {
           "bin/placeholder/ContainerFS.dll": {}
@@ -98,7 +146,7 @@
       }
     },
     "net5.0": {
-      "SyslogLogging/2.0.1.3": {
+      "SyslogLogging/2.0.1.6": {
         "type": "package",
         "compile": {
           "lib/net5.0/LoggingModule.dll": {}
@@ -107,11 +155,11 @@
           "lib/net5.0/LoggingModule.dll": {}
         }
       },
-      "ContainerFS/1.2.0": {
+      "ContainerFS/1.2.0.1": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
-          "SyslogLogging": "2.0.1.3"
+          "SyslogLogging": "2.0.1.6"
         },
         "compile": {
           "bin/placeholder/ContainerFS.dll": {}
@@ -122,7 +170,7 @@
       }
     },
     "net5.0/win7-x86": {
-      "SyslogLogging/2.0.1.3": {
+      "SyslogLogging/2.0.1.6": {
         "type": "package",
         "compile": {
           "lib/net5.0/LoggingModule.dll": {}
@@ -131,11 +179,59 @@
           "lib/net5.0/LoggingModule.dll": {}
         }
       },
-      "ContainerFS/1.2.0": {
+      "ContainerFS/1.2.0.1": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
-          "SyslogLogging": "2.0.1.3"
+          "SyslogLogging": "2.0.1.6"
+        },
+        "compile": {
+          "bin/placeholder/ContainerFS.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ContainerFS.dll": {}
+        }
+      }
+    },
+    "net6.0": {
+      "SyslogLogging/2.0.1.6": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/LoggingModule.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/LoggingModule.dll": {}
+        }
+      },
+      "ContainerFS/1.2.0.1": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "SyslogLogging": "2.0.1.6"
+        },
+        "compile": {
+          "bin/placeholder/ContainerFS.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ContainerFS.dll": {}
+        }
+      }
+    },
+    "net6.0/win7-x86": {
+      "SyslogLogging/2.0.1.6": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/LoggingModule.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/LoggingModule.dll": {}
+        }
+      },
+      "ContainerFS/1.2.0.1": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "SyslogLogging": "2.0.1.6"
         },
         "compile": {
           "bin/placeholder/ContainerFS.dll": {}
@@ -147,25 +243,27 @@
     }
   },
   "libraries": {
-    "SyslogLogging/2.0.1.3": {
-      "sha512": "y+EOA2XH7IIoWrJQe8QSTbRaVYnsDfl2+a9YPLvJsfwETa3bvZw954uvqYnPDb/cGT3s3txwFpalgxX2IhJreQ==",
+    "SyslogLogging/2.0.1.6": {
+      "sha512": "oaJ8hkQOtsv2GsL0kkn4XbpV3URS3PI9uPORYM7iQHkBtJY6mup488CNPV94bjhpFQe6p+OoEO3Z5r4Ttm42yw==",
       "type": "package",
-      "path": "sysloglogging/2.0.1.3",
+      "path": "sysloglogging/2.0.1.6",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.md",
         "lib/net451/LoggingModule.dll",
         "lib/net5.0/LoggingModule.dll",
+        "lib/net6.0/LoggingModule.dll",
         "lib/netcoreapp3.1/LoggingModule.dll",
         "lib/netcoreapp3.1/LoggingModule.xml",
         "lib/netstandard2.0/LoggingModule.dll",
         "lib/netstandard2.1/LoggingModule.dll",
-        "sysloglogging.2.0.1.3.nupkg.sha512",
+        "logo.png",
+        "sysloglogging.2.0.1.6.nupkg.sha512",
         "sysloglogging.nuspec"
       ]
     },
-    "ContainerFS/1.2.0": {
+    "ContainerFS/1.2.0.1": {
       "type": "project",
       "path": "../ContainerFS/ContainerFS.csproj",
       "msbuildProject": "../ContainerFS/ContainerFS.csproj"
@@ -173,18 +271,25 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "ContainerFS >= 1.2.0"
+      "ContainerFS >= 1.2.0.1"
     ],
     ".NETFramework,Version=v4.5.2": [
-      "ContainerFS >= 1.2.0"
+      "ContainerFS >= 1.2.0.1"
+    ],
+    ".NETFramework,Version=v4.6.1": [
+      "ContainerFS >= 1.2.0.1"
     ],
     "net5.0": [
-      "ContainerFS >= 1.2.0"
+      "ContainerFS >= 1.2.0.1"
+    ],
+    "net6.0": [
+      "ContainerFS >= 1.2.0.1"
     ]
   },
   "packageFolders": {
     "C:\\Users\\joelc\\.nuget\\packages\\": {},
-    "C:\\Microsoft\\Xamarin\\NuGet\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
@@ -198,17 +303,21 @@
       "projectStyle": "PackageReference",
       "crossTargeting": true,
       "fallbackFolders": [
-        "C:\\Microsoft\\Xamarin\\NuGet\\",
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
         "C:\\Users\\joelc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net452",
+        "net461",
         "net5.0",
+        "net6.0",
         "netcoreapp3.1"
       ],
       "sources": {
@@ -232,8 +341,24 @@
             }
           }
         },
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "projectReferences": {
+            "C:\\Code\\Misc\\ContainerFS\\ContainerFS\\ContainerFS.csproj": {
+              "projectPath": "C:\\Code\\Misc\\ContainerFS\\ContainerFS\\ContainerFS.csproj"
+            }
+          }
+        },
         "net452": {
           "targetAlias": "net452",
+          "projectReferences": {
+            "C:\\Code\\Misc\\ContainerFS\\ContainerFS\\ContainerFS.csproj": {
+              "projectPath": "C:\\Code\\Misc\\ContainerFS\\ContainerFS\\ContainerFS.csproj"
+            }
+          }
+        },
+        "net461": {
+          "targetAlias": "net461",
           "projectReferences": {
             "C:\\Code\\Misc\\ContainerFS\\ContainerFS\\ContainerFS.csproj": {
               "projectPath": "C:\\Code\\Misc\\ContainerFS\\ContainerFS\\ContainerFS.csproj"
@@ -265,7 +390,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
       },
       "net5.0": {
         "targetAlias": "net5.0",
@@ -284,11 +409,34 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
+      },
+      "net6.0": {
+        "targetAlias": "net6.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
       },
       "net452": {
         "targetAlias": "net452",
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
+      },
+      "net461": {
+        "targetAlias": "net461",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {

@@ -6,36 +6,36 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v5.0": {
-      "ContainerFS/1.2.0": {
+      "ContainerFS/1.2.0.1": {
         "dependencies": {
-          "SyslogLogging": "2.0.1.3"
+          "SyslogLogging": "2.0.1.6"
         },
         "runtime": {
           "ContainerFS.dll": {}
         }
       },
-      "SyslogLogging/2.0.1.3": {
+      "SyslogLogging/2.0.1.6": {
         "runtime": {
           "lib/net5.0/LoggingModule.dll": {
-            "assemblyVersion": "2.0.1.3",
-            "fileVersion": "2.0.1.3"
+            "assemblyVersion": "2.0.1.6",
+            "fileVersion": "2.0.1.6"
           }
         }
       }
     }
   },
   "libraries": {
-    "ContainerFS/1.2.0": {
+    "ContainerFS/1.2.0.1": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "SyslogLogging/2.0.1.3": {
+    "SyslogLogging/2.0.1.6": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-y+EOA2XH7IIoWrJQe8QSTbRaVYnsDfl2+a9YPLvJsfwETa3bvZw954uvqYnPDb/cGT3s3txwFpalgxX2IhJreQ==",
-      "path": "sysloglogging/2.0.1.3",
-      "hashPath": "sysloglogging.2.0.1.3.nupkg.sha512"
+      "sha512": "sha512-oaJ8hkQOtsv2GsL0kkn4XbpV3URS3PI9uPORYM7iQHkBtJY6mup488CNPV94bjhpFQe6p+OoEO3Z5r4Ttm42yw==",
+      "path": "sysloglogging/2.0.1.6",
+      "hashPath": "sysloglogging.2.0.1.6.nupkg.sha512"
     }
   }
 }

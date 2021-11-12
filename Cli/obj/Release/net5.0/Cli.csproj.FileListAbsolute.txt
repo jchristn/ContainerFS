@@ -11,7 +11,6 @@ C:\Code\Misc\ContainerFS\Cli\bin\Release\net5.0\cfs.pdb
 C:\Code\Misc\ContainerFS\Cli\bin\Release\net5.0\LoggingModule.dll
 C:\Code\Misc\ContainerFS\Cli\bin\Release\net5.0\ContainerFS.dll
 C:\Code\Misc\ContainerFS\Cli\bin\Release\net5.0\ContainerFS.pdb
-C:\Code\Misc\ContainerFS\Cli\obj\Release\net5.0\Cli.csprojAssemblyReference.cache
 C:\Code\Misc\ContainerFS\Cli\obj\Release\net5.0\Cli.GeneratedMSBuildEditorConfig.editorconfig
 C:\Code\Misc\ContainerFS\Cli\obj\Release\net5.0\Cli.AssemblyInfoInputs.cache
 C:\Code\Misc\ContainerFS\Cli\obj\Release\net5.0\Cli.AssemblyInfo.cs
@@ -21,3 +20,4 @@ C:\Code\Misc\ContainerFS\Cli\obj\Release\net5.0\cfs.dll
 C:\Code\Misc\ContainerFS\Cli\obj\Release\net5.0\ref\cfs.dll
 C:\Code\Misc\ContainerFS\Cli\obj\Release\net5.0\cfs.pdb
 C:\Code\Misc\ContainerFS\Cli\obj\Release\net5.0\Cli.genruntimeconfig.cache
+C:\Code\Misc\ContainerFS\Cli\obj\Release\net5.0\Cli.csproj.AssemblyReference.cache

@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "u09OOiKxW2TsFc40oJ/kCgYwnRvOLvXOVINRDLlO1tRQW0X8U/FP7qEYG9q75qkdU6U8V7q8khmKeglWqMJrMw==",
+  "dgSpecHash": "KDk2UVzLGZM2mrsVzngkCOuL4x6fTd9Ffg80uCFHBGJaVrYdoBc9m1lMr7mFXhfm4nFzJq8eURJ+3sy+7baUyQ==",
   "success": true,
   "projectFilePath": "C:\\Code\\Misc\\ContainerFS\\Test\\Test.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\joelc\\.nuget\\packages\\sysloglogging\\2.0.1.3\\sysloglogging.2.0.1.3.nupkg.sha512"
+    "C:\\Users\\joelc\\.nuget\\packages\\sysloglogging\\2.0.1.6\\sysloglogging.2.0.1.6.nupkg.sha512"
   ],
   "logs": []
 }
